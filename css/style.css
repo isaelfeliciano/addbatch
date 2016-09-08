@@ -1,0 +1,99 @@
+/*
+Background color:  #eaeaea
+Font color: 			 #1f3064
+Font color--input: #f5a04c
+Warning color: 		 #c44640
+Success color: 		 #667092
+*/
+*{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	display: block;
+}
+/* >>>>---- HELPERS ----*/
+.center-align, .center-align-absolute{
+	margin-left: auto;
+	margin-right: auto;
+}
+.center-align-absolute{
+  left: 0;
+  right: 0;
+}
+.center-text{
+	text-align: center;
+}
+
+.padding-sm{
+	padding: 1em;
+}
+.box-radius{
+  border-radius: 5px;
+}
+.not-visible{
+/*  visibility: hidden;*/
+	opacity: 0;
+	-webkit-transition:opacity 1s linear;
+}
+.no-display {
+	display: none;
+}
+.is-visible{
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* ---- HELPERS ----<<<<*/
+
+body, html {
+	width: 100%;
+	height: 100%;
+	background-color: #eaeaea;
+	overflow: hidden;
+	color: #1f3064;
+	font-size: 16px;
+	font-family: 'calibri', 'ubuntu';
+	padding-top: 1em;
+}
+
+#main-page {
+	width: 100%;
+	height: 100%;
+}
+
+h1, h2 {
+	padding: 0.1em 0;
+}
+
+h1 {
+	font-size: 3em;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+.search-batch {
+	width: 2em;
+/*	height: em;*/
+	color: #f5a04c;
+	font-size: 6em;
+	margin-top: 5%;
+	text-align: center;
+}
+
+#main-page .btn {
+	top: 10%;
+	position: relative;
+}
+
+.btn {
+	width: 10em;
+	height: 1.5em;
+	background-color: #f5a04c;
+	color: #FFF;
+	border: none;
+	font-size: 1.5em;
+	margin-top: 0.5em;
+}
