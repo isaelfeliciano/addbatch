@@ -1,0 +1,1 @@
+$('#create-page input').number(true, 3);

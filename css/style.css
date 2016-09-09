@@ -54,12 +54,16 @@ body, html {
 	color: #1f3064;
 	font-size: 16px;
 	font-family: 'calibri', 'ubuntu';
-	padding-top: 1em;
 }
 
-#main-page {
+#main-page, #create-page {
 	width: 100%;
 	height: 100%;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
 }
 
 h1, h2 {
@@ -74,18 +78,26 @@ h2 {
 	font-size: 1.5em;
 }
 
+input {
+    color: #f5a04c;
+    border: 2px solid #1f3064;
+}
+
 .search-batch {
 	width: 2em;
-/*	height: em;*/
-	color: #f5a04c;
 	font-size: 6em;
 	margin-top: 5%;
-	text-align: center;
+    text-align: center;
 }
 
 #main-page .btn {
-	top: 10%;
 	position: relative;
+	top: 10%;
+}
+
+#main-page .btn i {
+    position: absolute;
+    left: 1em;
 }
 
 .btn {
@@ -96,4 +108,82 @@ h2 {
 	border: none;
 	font-size: 1.5em;
 	margin-top: 0.5em;
+    cursor: pointer;
 }
+
+#create-page {
+    position: relative;
+}
+
+#create-page header {
+    width: 100%;
+    height: 3.5em;
+    background-color: #FFF;
+    top: 0;
+    position: absolute;
+}
+header img {
+    max-width: 9em;
+    position: absolute;
+    top: 0.2em;
+    left: 1em;
+}
+header h2 {
+    position: absolute;
+    right: 1em;
+    top: 0.6em;
+}
+
+#create-page .container {
+    width: 100%;
+    top: 4em;
+    padding: 0 1em;
+    position: relative;
+}
+
+.container .left-col {
+    width: 75%;
+    position: relative;
+    top: 5em;
+}
+.stat-number {
+    font-size: 5em;
+}
+.left-col span {
+    font-size: 1.1em;
+}
+
+.container .right-col {
+    width: 30%;
+    right: 1.5em;
+    position: absolute;
+    top: 6em;
+    text-align: right;
+}
+
+.quantity-list li, .quantity-list li span {
+    display: inline-block;
+    font-size: 1.4em;
+}
+.quantity-list li span {
+    font-size: 0.88em;
+}
+
+#create-page input {
+    width: 9em;
+    position: absolute;
+    top: 2em;
+    font-size: 2.5em;
+}
+
+#create-page .btn {
+    position: absolute;
+    bottom: 2em;
+}
+
+.added-by {
+    position: absolute;
+    bottom: 1em;
+    margin-left: 1em;
+}
+
