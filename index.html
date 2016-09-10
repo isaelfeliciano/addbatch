@@ -8,6 +8,14 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+<div class="modal no-display">
+    <div class="modal__box center-align-absolute center-text box-radius">
+        <i class="fa fa-5x">&#xf007</i>
+        <input class="center-align" type="text" name="user" placeholder="Enter your name">
+        <button class="btn center-align box-radius">Save</button>
+    </div>
+</div>
+
 <div id="main-page" class="center-text">
 	<img class="img-main-page center-align" src="img/fenix-mfg-logo.png">
 
@@ -16,7 +24,7 @@
 
 	<input class="search-batch center-align box-radius" type="text" name="search" placeholder="000">
 
-	<a href="#create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Create Tape</a>
+	<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Create Tape</button>
 	<button class="btn center-align box-radius"><i class="fa">&#xf14b</i> Edit Tape</button>
 </div>
 
