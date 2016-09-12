@@ -11,8 +11,8 @@
 <div class="modal no-display">
     <div class="modal__box center-align-absolute center-text box-radius">
         <i class="fa fa-5x">&#xf007</i>
-        <input class="center-align" type="text" name="user" placeholder="Enter your name">
-        <button class="btn center-align box-radius">Save</button>
+        <input id="jsModalInput" class="center-align" type="text" name="user" placeholder="Enter your name">
+        <button class="jsModal-save btn center-align box-radius">Save</button>
     </div>
 </div>
 
@@ -38,35 +38,22 @@
 
 	<div class="container">
 		<div class="left-col">
-			<p class="stat-number">0</p>
+			<p id="jsBatchNumber" class="stat-number">0</p>
 			<span>Batch number</span>
 
-			<p class="stat-number">0</p>
+			<p id="jsTickets" class="stat-number">0</p>
 			<span>Tickets</span>
 
-			<p class="stat-number">0</p>
+			<p id="jsTotal" class="stat-number">0</p>
 			<span>Total</span>
 
-			<p class="stat-number">0</p>
+			<p id="jsTimesModified" class="stat-number">0</p>
       <span>Times modified</span>
 		</div>
 
 
 		<div class="right-col">
-			<ul class="quantity-list">
-				<li>
-					<input type="text" name="quantity" value="545.000" maxlength="15"> <span>(1)</span>
-				</li>
-				<li>
-					<input type="text" name="quantity" value="545.000" maxlength="15"> <span>(1)</span>
-				</li>
-				<li>
-					<input type="text" name="quantity" value="545.000" maxlength="15"> <span>(1)</span>
-				</li>
-				<li>
-					<input type="text" name="quantity" value="545.000" maxlength="15"> <span>(1)</span>
-				</li>
-			</ul>
+			<ul class="quantity-list"></ul>
 		</div>
 	</div>
 
