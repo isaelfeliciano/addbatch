@@ -191,39 +191,41 @@ header h2 {
 
 .container .right-col {
     width: 30%;
-		height: 90%;
+	height: 90%;
     right: 1.5em;
     position: absolute;
     top: 6em;
     text-align: right;
-		overflow-y: auto;
+	overflow-y: auto;
 }
 
 .quantity-list li {
 	
 }
-.quantity-list li input {
-		padding: none;
+.quantity-list li input, 
+#create-page input[name="added-by"] {
+	padding: none;
     font-size: 1.4em;
-		text-align: right;
-		border: 2px solid #eaeaea;
+	text-align: right;
+	border: 2px solid #eaeaea;
     background-color: #eaeaea;
     color: #1f3064;
     display: inline;
-		width: 9em;
+	width: 9em;
 }
 .quantity-list li:nth-of-type(even) > input {
-		opacity: 0.7;
+	opacity: 0.7;
 }
-.quantity-list li input:focus {
-		color: #f5a04c;
+.quantity-list li input:focus,
+#create-page input[name="added-by"]:focus {
+	color: #f5a04c;
     border: 2px solid #1f3064;
     background-color: #1f3064;
-		opacity: 1;
+	opacity: 1;
 }
 
 .quantity-list li span {
-		display: inline;
+	display: inline;
     font-size: 0.88em;
 }
 
@@ -232,12 +234,12 @@ header h2 {
     position: absolute;
     top: 2em;
     font-size: 2.5em;
-		text-align: right;
-		color: #1f3064;
-		padding-right: 0.1em;
+	text-align: right;
+	color: #1f3064;
+	padding-right: 0.1em;
 }
 #create-page input[name="number-input"]:focus {
-		color: #f5a04c;
+	color: #f5a04c;
 }
 
 #create-page .btn {
@@ -251,3 +253,6 @@ header h2 {
     margin-left: 1em;
 }
 
+#create-page input[name="added-by"] {
+    text-align: left;
+}

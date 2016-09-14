@@ -15,10 +15,14 @@
     "type": "git",
     "url": "git+https://github.com/isaelfeliciano/addbatch.git"
   },
+  "dependencies": {
+    "shortid": "latest"
+  },
   "keywords": [
     "inventory",
     "adding",
-    "tape"
+    "tape",
+    "add"
   ],
   "author": "Rogelio Feliciano",
   "license": "MIT",

@@ -1,5 +1,28 @@
-const lS = localStorage;
+// var shortid = require('shortid');
+
 let ticketsValues = [];
+Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function(key) {
+    return JSON.parse(this.getItem(key))
+}
+const lS = localStorage;
+
+if (lS.getItem('firstTime')) {
+	var user = lS.getObj('firstTime');
+	$('input[name="added-by"]').val(user.userName);
+}
+
+$('input[name="added-by"]').on('keydown', (e) => {
+	if (e.which == 13 || e.keyCode == 13) {
+		e.preventDefault();
+		let input = $('input[name="added-by"]')
+		input.blur();
+		$('body').focus();
+		lS.setObj('firstTime', {userName: input.val()})
+	}
+})
 
 function updateNumberFormat() {
 	// $('input[name="number-input"]').number(true, 3);
@@ -45,8 +68,11 @@ function btnModalSaveNewBatch() {
 
 function btnModalSaveNewUser() {
 	let userName = $('input[name="user"]').val();
-	lS.setItem('firstTime', `{userName: ${userName}}`);
+	let firstTime = {userName: userName};
+	firstTime = JSON.stringify(firstTime);
+	lS.setItem('firstTime', firstTime);
 	$('.modal').addClass('no-display');
+	$('input[name="added-by"]').val(userName);
 	$('input[name="user"]').val('');
 	$('input[name="search"]').focus();
 }
@@ -99,8 +125,9 @@ function addTicketsAndPopulateList(value) {
 	value = numeral().unformat(value);
 	value = parseFloat(value);
 	ticketsValues.push(value);
-	$('#jsTotal').text(_.sum(ticketsValues));
-	$('#jsTotal').number(true, 3);
+	let sumResult = _.sum(ticketsValues);
+	sumResult = numeral(sumResult).format('0,0.000')
+	$('#jsTotal').text(sumResult);
 }
 
 var decimal = false;
@@ -114,4 +141,37 @@ $(document).on('keyup', 'input[data-type="number"]', function() {
 		value = numeral(value).format('0,0');
 		$(this).val(value);
 	}
+});
+
+var getTickets = function(tickets, callback) {
+	let resultArray = [];
+	$('input[name="quantity"]').each(function(i, value) {
+		let obj = {};
+		obj.quantity = $(this).val();
+		obj.modified = $(this).next().text();
+		obj.modified = numeral(obj.modified).format();
+		resultArray.push(obj);
+		if (i == (tickets-1))
+			callback(resultArray);
+	});
+}
+
+$('#jsBtnSaveAndPrint').on('click', (e) => {
+	let batchObj = {};
+	let batchNumber = parseInt($('#jsBatchNumber').text());
+	let ticketsQuantity = parseInt($('#jsTickets').text());
+	let total = numeral().unformat($('#jsTotal').text());
+	let modified = $('#jsTimesModified').text();
+	let addedBy = $('input[name="added-by"]').val();
+	getTickets(ticketsQuantity, function(tickets){
+		batchObj = {
+			batchNumber: batchNumber,
+			ticketsQuantity: ticketsQuantity,
+			total: total,
+			modified: modified,
+			addedBy: addedBy,
+			tickets: tickets
+		}
+		lS.setObj('batchData', batchObj);
+	});
 });
