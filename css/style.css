@@ -102,6 +102,7 @@ input:focus {
     position: absolute;
     top: 25%;
     background-color: #FFF;
+  	border: 1px solid #f5a04c;
 }
 .modal__box i {
     margin-top: 0.5em;
@@ -109,6 +110,24 @@ input:focus {
 .modal__box input {
     margin-top: 1em;
     font-size: 2em;
+}
+
+.modal--loading {
+  background-color: rgba(0, 0, 0, 0);
+}
+.modal__box--loading {
+  	width: 15em;
+	height: 10em;
+}
+.modal__box--loading i {
+  position: relative;
+  top: 0.1em;
+  padding: 0;
+  margin: 0;
+}
+.modal__box--loading span {
+  margin-top: 1em;
+  font-size: 1.3em;
 }
 
 .search-batch {
