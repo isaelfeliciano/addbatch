@@ -5,18 +5,19 @@
 	<title style="display: none;">AddBatch</title>
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/animation.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<div class="modal no-display">
+<div id="jsModalInputContainer" class="modal no-display">
     <div class="modal__box center-align-absolute center-text box-radius">
-        <i class="fa fa-5x">&#xf007</i>
+        <i id="jsModalIcon" class="fa fa-5x">&#xf007</i>
         <input id="jsModalInput" class="center-align" type="text" name="user" placeholder="Enter your name">
         <button class="jsModal-save btn center-align box-radius">Save</button>
     </div>
 </div>
 	
-<div id="jsModalLoading" class="modal modal--loading">
+<div id="jsModalLoading" class="no-display modal modal--loading  animated">
 	<div class="modal__box modal__box--loading center-align-absolute center-text box-radius">
 		<i class="fa fa-cog fa-spin fa-5x fa-fw"></i>
 	  	<span>Loading...</span>

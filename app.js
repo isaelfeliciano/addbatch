@@ -1,4 +1,4 @@
-// var shortid = require('shortid');
+var shortid = require('shortid');
 
 let ticketsValues = [];
 Storage.prototype.setObj = function(key, obj) {
@@ -38,10 +38,10 @@ updateNumberFormat();
 $('#btn-create-page').on('click', (e) => {
 	e.preventDefault();
 	window.location = "#create-page";
-	$('.modal__box i').attr('class', 'fa fa-5x fa-book').text('');
+	$('#jsModalIcon').attr('class', 'fa fa-5x fa-book').text('');
 	$('#jsModalInput').attr('name', 'batchNumber');
 	$('#jsModalInput').attr('placeholder', 'Enter batch number');
-	$('.modal').removeClass('no-display');
+	$('#jsModalInputContainer').removeClass('no-display');
 	$('#jsModalInput').focus();
 	$('.jsModal-save').on('click', (e) => {
 		e.preventDefault();
@@ -62,7 +62,7 @@ $('#jsModalInput').on('keydown', (e) => {
 function btnModalSaveNewBatch() {
 	let batchNumber = $('#jsModalInput').val();
 	$('#jsBatchNumber').text(batchNumber);
-	$('.modal').addClass('no-display');
+	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="number-input"]').focus();
 }
 
@@ -71,7 +71,7 @@ function btnModalSaveNewUser() {
 	let firstTime = {userName: userName};
 	firstTime = JSON.stringify(firstTime);
 	lS.setItem('firstTime', firstTime);
-	$('.modal').addClass('no-display');
+	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="added-by"]').val(userName);
 	$('input[name="user"]').val('');
 	$('input[name="search"]').focus();
@@ -79,7 +79,7 @@ function btnModalSaveNewUser() {
 
 // lS.removeItem('firstTime');
 if (!lS.getItem('firstTime')) {
-	$('.modal').removeClass('no-display');
+	$('#jsModalInputContainer').removeClass('no-display');
 	$('input[name="user"]').focus();
 	$('.jsModal-save').on('click', function(e) {
 		e.preventDefault();
@@ -147,7 +147,7 @@ var getTickets = function(tickets, callback) {
 	let resultArray = [];
 	$('input[name="quantity"]').each(function(i, value) {
 		let obj = {};
-		obj.quantity = $(this).val();
+		obj.quantity = numeral().unformat($(this).val());
 		obj.modified = $(this).next().text();
 		obj.modified = numeral(obj.modified).format();
 		resultArray.push(obj);
@@ -157,6 +157,7 @@ var getTickets = function(tickets, callback) {
 }
 
 $('#jsBtnSaveAndPrint').on('click', (e) => {
+    loadingIn();
 	let batchObj = {};
 	let batchNumber = parseInt($('#jsBatchNumber').text());
 	let ticketsQuantity = parseInt($('#jsTickets').text());
@@ -165,6 +166,7 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 	let addedBy = $('input[name="added-by"]').val();
 	getTickets(ticketsQuantity, function(tickets){
 		batchObj = {
+			id: shortid.generate(),
 			batchNumber: batchNumber,
 			ticketsQuantity: ticketsQuantity,
 			total: total,
@@ -173,5 +175,39 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 			tickets: tickets
 		}
 		lS.setObj('batchData', batchObj);
+		batchObj = JSON.stringify(batchObj);
+		sendJSON(batchObj);
 	});
 });
+
+function loadingIn() {
+    $('#jsModalLoading').removeClass('no-display')
+    $('#jsModalLoading').removeClass('fadeOutUpBig')
+    .addClass('fadeInUpBig');
+};
+
+function loadingOut() {
+    setTimeout(function waitOneSec() {
+    $('#jsModalLoading').removeClass('fadeInUpBig')
+    .addClass('fadeOutUpBig');
+    }, 1500);
+}
+
+function sendJSON(data) {
+	$.ajax({
+		url: 'http://localhost:3000/saveBatchAndPrint',
+		type: 'POST',
+		dataType: 'json',
+		data: data,
+		})
+		.done(function() {
+			console.log("success");
+			loadingOut();
+		})
+		.fail(function() {
+			console.log("Error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+}
