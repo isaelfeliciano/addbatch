@@ -175,39 +175,65 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 			tickets: tickets
 		}
 		lS.setObj('batchData', batchObj);
-		batchObj = JSON.stringify(batchObj);
+		// batchObj = JSON.stringify(batchObj);
 		sendJSON(batchObj);
 	});
 });
 
 function loadingIn() {
+	$('#jsModalLoading span').text("Loading...");
+	$('#jsModalLoading i')
+		.addClass('fa-cog fa-spin fa-fw')
+		.removeClass('fa-check');
     $('#jsModalLoading').removeClass('no-display')
     $('#jsModalLoading').removeClass('fadeOutUpBig')
     .addClass('fadeInUpBig');
 };
 
-function loadingOut() {
-    setTimeout(function waitOneSec() {
-    $('#jsModalLoading').removeClass('fadeInUpBig')
-    .addClass('fadeOutUpBig');
-    }, 1500);
+function loadingOut(err, text) {
+	if (err) {
+		setTimeout(function waitOneSec() {
+		$('#jsModalLoading span').text(text);
+		$('#jsModalLoading i')
+		.removeClass('fa-cog fa-spin fa-fw')
+		.addClass('fa-times');
+	}, 1000);
+	} else {
+		setTimeout(function waitOneSec() {
+			$('#jsModalLoading span').text(text);
+			$('#jsModalLoading i')
+			.removeClass('fa-cog fa-spin fa-fw')
+			.addClass('fa-check');
+		}, 1000);
+	    setTimeout(function waitTwoSec() {
+	    $('#jsModalLoading').removeClass('fadeInUpBig')
+	    .addClass('fadeOutUpBig');
+	    }, 2500);
+	}
 }
 
 function sendJSON(data) {
 	$.ajax({
-		url: 'http://localhost:3000/saveBatchAndPrint',
+		url: 'http://localhost:3131/saveBatchAndPrint',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'JSON',
 		data: data,
 		})
-		.done(function() {
-			console.log("success");
-			loadingOut();
+		.done(function(data, textStatus, jqXHR) {
+			if (data.msg == 'error-saving') {
+				console.log('error-saving');
+				loadingOut(true, 'Error Saving to DB');
+			} else {
+				console.log(`success ${data.msg}`);
+				loadingOut(null, 'Batch saved');
+			}
 		})
-		.fail(function() {
-			console.log("Error");
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			console.log(errorThrown);
+			loadingOut(true, "Error sending to server")
 		})
-		.always(function() {
+		.always(function(data, textStatus, jqXHR) {
 			console.log("complete");
+			console.log(textStatus);
 		});
 }
