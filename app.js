@@ -43,7 +43,7 @@ $('#btn-create-page').on('click', (e) => {
 	$('#jsModalInput').attr('placeholder', 'Enter batch number');
 	$('#jsModalInputContainer').removeClass('no-display');
 	$('#jsModalInput').focus();
-	$('.jsModal-save').on('click', (e) => {
+	$('.jsModalBtnSave').text('Start adding').on('click', (e) => {
 		e.preventDefault();
 		btnModalSaveNewBatch();
 	});
@@ -81,7 +81,7 @@ function btnModalSaveNewUser() {
 if (!lS.getItem('firstTime')) {
 	$('#jsModalInputContainer').removeClass('no-display');
 	$('input[name="user"]').focus();
-	$('.jsModal-save').on('click', function(e) {
+	$('.jsModalBtnSave').on('click', function(e) {
 		e.preventDefault();
 		btnModalSaveNewUser();
 	});
