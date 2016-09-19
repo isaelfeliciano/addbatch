@@ -1,6 +1,6 @@
 var shortid = require('shortid');
 
-let ticketsValues = [];
+var ticketsValues = [];
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
 }
@@ -25,13 +25,17 @@ $('input[name="added-by"]').on('keydown', (e) => {
 })
 
 function updateNumberFormat() {
-	// $('input[name="number-input"]').number(true, 3);
-	// $('input[name="quantity"]').number(true, 3);
-	$('input[name="quantity"]').each(function() {
+	/*$('input[name="quantity"]').each(function() {
 		let value = $(this).val();
 		value = numeral(value).format('0,0.000');
 		$(this).val(value);
-	});
+	});*/
+
+	(function() {
+		let value = $('#jsTotal').text();
+		value = numeral(value).format('0,0.000');
+		$('#jsTotal').text(value);
+	})();
 };
 updateNumberFormat();
 
@@ -87,28 +91,42 @@ if (!lS.getItem('firstTime')) {
 	});
 }
 
-$('input[name="number-input"]').on('keydown', (e) => {
+$('input[name="number-input"]' ).on('keydown', function(e) {
 	if (e.which == 13 || 
 	e.keyCode == 13 || 
 	e.which == 107 ||
 	e.keyCode == 107 ) {
 		e.preventDefault();
-		let value = $('input[name="number-input"]').val();
+		let value = $(this).val();
 		addTicketsAndPopulateList(value);
 	}
 
 	if (e.which == 109 || e.keyCode == 109) {
 		e.preventDefault();
-		let value = $('input[name="number-input"]').val();
+		let value = $(this).val();
 		value = '-' + value;
 		addTicketsAndPopulateList(value);
 	}
 });
 
+
+function recalculateBatch() {
+	let tempStorage = [];
+	let ticketsQuantity = parseFloat($('#jsTickets').text());
+	$('input[name="quantity"]').each(function(i, value) {
+		tempStorage.push(numeral().unformat($(this).val()));
+		if (i == (ticketsQuantity-1)) {
+			let total = _.sum(tempStorage);
+			$('#jsTotal').text(total);
+			updateNumberFormat();
+		}
+	});
+}
+
 function addTicketsAndPopulateList(value) {
 	$('.quantity-list').append(
 		`<li>
-			<input data-type="number" type="text" name="quantity" value="${value}" maxlength="15"> 
+			<input class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
 			<span>(0)</span>
 		</li>`
 	);
@@ -124,10 +142,34 @@ function addTicketsAndPopulateList(value) {
 
 	value = numeral().unformat(value);
 	value = parseFloat(value);
-	ticketsValues.push(value);
+	recalculateBatch();
+	/*ticketsValues.push(value);
 	let sumResult = _.sum(ticketsValues);
 	sumResult = numeral(sumResult).format('0,0.000')
-	$('#jsTotal').text(sumResult);
+	$('#jsTotal').text(sumResult);*/
+
+	$('input[name="quantity"]' ).on('keydown', function(e) {
+		var selector = $(this);
+		if (e.which == 13 || 
+		e.keyCode == 13 || 
+		e.which == 107 ||
+		e.keyCode == 107 ) {
+			e.preventDefault();
+			let value = $(selector).val();
+			value = value.replace('-', '');
+			$(selector).val(value);
+			recalculateBatch();
+		}
+
+		if (e.which == 109 || e.keyCode == 109) {
+			e.preventDefault();
+			let value = $(selector).val();
+			value = '-' + value;
+			$(selector).val(value);
+			console.log(value);
+			recalculateBatch();
+		}
+	});
 }
 
 var decimal = false;
@@ -226,6 +268,7 @@ function sendJSON(data) {
 			} else {
 				console.log(`success ${data.msg}`);
 				loadingOut(null, 'Batch saved');
+				resetInputs();
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
@@ -237,3 +280,14 @@ function sendJSON(data) {
 			console.log(textStatus);
 		});
 }
+
+function resetInputs() {
+	$('.jsResetInput').val('');
+	$('#jsBatchNumber, #jsTotal, #jsTickets').text('0');
+	$('.quantity-list').empty();
+	ticketsValues = [];
+}
+
+$('#btnCancel').on('click', (e) => {
+	resetInputs();
+});

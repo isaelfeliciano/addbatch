@@ -186,10 +186,17 @@ header h2 {
 
 .navigation {
 	list-style: none;
+    margin: 0;
+    padding: 0;
 	text-decoration: underline;
 	top: 1.3em;
 	right: 1em;
 	position: absolute;
+}
+.navigation li {
+    display: inline;
+    float: right;
+    padding: 0 0.3em;
 }
 
 #create-page .container {
@@ -243,9 +250,9 @@ header h2 {
     display: inline;
 	width: 9em;
 }
-.quantity-list li:nth-of-type(even) > input {
+/*.quantity-list li:nth-of-type(even) > input {
 	opacity: 0.7;
-}
+}*/
 .quantity-list li input:focus,
 #create-page input[name="added-by"]:focus {
 	color: #f5a04c;
