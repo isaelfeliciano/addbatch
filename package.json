@@ -5,7 +5,7 @@
   "main": "index.html",
 	"window": {
 		"title": "AddBatch, Fenix MFG",
-		"icon": "icon.png",
+		"icon": "icon-96.png", // Icon from https://icons8.com
 		"resizable":false,
 		"fullscreen": false,
 		"width": 800,
@@ -16,7 +16,9 @@
     "url": "git+https://github.com/isaelfeliciano/addbatch.git"
   },
   "dependencies": {
-    "shortid": "latest"
+    "shortid": "latest",
+    "unique-temp-dir": "latest",
+    "node-printer": "latest"
   },
   "keywords": [
     "inventory",

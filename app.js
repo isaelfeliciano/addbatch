@@ -1,7 +1,7 @@
 var shortid = require('shortid');
-
 var count = 1;
 var ticketsValues = [];
+
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
 }
@@ -70,7 +70,7 @@ function btnModalSaveNewBatch() {
 	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="number-input"]').focus();
 	loadingIn();
-	getAjax(batchNumber);
+	getAjax(batchNumber, 'searchBatch', null);
 }
 
 function btnModalSaveNewUser() {
@@ -109,6 +109,36 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 		let value = $(this).val();
 		value = '-' + value;
 		addTicketsAndPopulateList(value);
+	}
+});
+
+$('input[name="search"]').on('keydown', function(e) {
+	if (e.which == 13 || e.keyCode == 13) {
+		e.preventDefault();
+		let batchNumber = $(this).val();
+		getAjax(batchNumber, 'searchBatchGetJSON', function(data) {
+			$('#jsTotal').text(data.total);
+			$('#jsBatchNumber').text(data.batchNumber);
+			$('#jsTickets').text(data.ticketsQuantity);
+			$('#jsTimesModified').text(data.modified);
+			$('input[name="added-by"]').val(data.addedBy);
+
+			var tickets = data.tickets;
+			console.log(data);
+			_.forEach(function(ticket, i, tickets) {
+				$('.quantity-list').append(
+					`<li>
+						<input id="${i++}" class="jsResetInput" type="text" name="quantity" value="${ticket.quantity}" maxlength="15"> 
+						<span>${ticket.modified}</span>
+					</li>`
+				);
+				console.log(i);
+				if (i == tickets.length) {
+					console.log("Terminado");
+					location = '#create-page';
+				}
+			});
+		});
 	}
 });
 
@@ -231,7 +261,7 @@ function loadingIn() {
     .addClass('fadeInUpBig');
 };
 
-function loadingOut(err, text) {
+function loadingOut(err, text, printAfter) {
 	if (err) {
 		setTimeout(function waitOneSec() {
 		$('#jsModalLoading span').text(text);
@@ -249,11 +279,16 @@ function loadingOut(err, text) {
 	    setTimeout(function waitTwoSec() {
 	    $('#jsModalLoading').removeClass('fadeInUpBig')
 	    .addClass('fadeOutUpBig');
+	    if (printAfter) {
+	    	printAfter();
+	    }
 	    }, 2500);
 	}
 }
 
 function sendJSON(data) {
+	data = JSON.stringify(data);
+	console.log(data);
 	$.ajax({
 		url: 'http://localhost:3131/saveBatchAndPrint',
 		type: 'POST',
@@ -266,8 +301,7 @@ function sendJSON(data) {
 				loadingOut(true, 'Error Saving to DB');
 			} else {
 				console.log(`success ${data.msg}`);
-				loadingOut(null, 'Batch saved');
-				resetInputs();
+				loadingOut(null, 'Batch saved', printTape);
 				count = 1;
 			}
 		})
@@ -281,9 +315,9 @@ function sendJSON(data) {
 		});
 }
 
-function getAjax(data) {
+function getAjax(data, route, callback) {
 	$.ajax({
-		url: 'http://localhost:3131/searchBatch',
+		url: 'http://localhost:3131/'+route,
 		type: 'GET',
 		data: {batchid: data}
 		})
@@ -300,6 +334,9 @@ function getAjax(data) {
 			}
 			if (data.msg == 'batch-no-exist') {
 				loadingOut(null, 'Batch no exist');
+			}
+			if (callback) {
+				callback(data);
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
@@ -320,6 +357,21 @@ function resetInputs() {
 }
 
 $('#btnCancel').on('click', (e) => {
+	$('#jsModalInputContainer').addClass('no-display');
 	resetInputs();
 	count = 1;
 });
+
+function printTape() {
+	hideOnPrint();
+	window.print({
+		"headerFooterEnabled": true,
+		"shouldPrintBackgrounds": false
+	});
+	hideOnPrint(); // Unhide elements
+	resetInputs();
+}
+
+function hideOnPrint() {
+	$('.jsHideOnPrint').toggleClass('no-display');
+}

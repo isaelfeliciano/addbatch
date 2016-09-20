@@ -11,6 +11,7 @@
 <body>
 <div id="jsModalInputContainer" class="modal no-display">
     <div class="modal__box center-align-absolute center-text box-radius">
+    	<a id="btnCancel" class="modal__box__btn-cancel" href="#main-page">Cancel</a>
         <i id="jsModalIcon" class="fa fa-5x">&#xf007</i>
         <input id="jsModalInput" class="jsResetInput center-align" type="text" name="user" placeholder="Enter your name">
         <button class="jsModalBtnSave btn center-align box-radius">Save</button>
@@ -24,7 +25,7 @@
 	</div>
 </div>
 
-<div id="main-page" class="center-text">
+<div id="main-page" class="jsHideOnPrint center-text">
 	<img class="img-main-page center-align" src="img/fenix-mfg-logo.png">
 
 	<h1>AddBatch</h1>
@@ -38,7 +39,7 @@
 
 
 <div id="create-page">
-	<header>
+	<header class="jsHideOnPrint">
 		<img class="img-create-page" src="img/fenix-mfg-logo.png">
 
 		<h2 class="header-app-title center-align-absolute center-text">AddBatch</h2>
@@ -51,14 +52,15 @@
 
 	<div class="container">
 		<div class="left-col">
+			<p id="jsTotal" class="stat-number">0</p>
+			<span>Total</span>
+
 			<p id="jsBatchNumber" class="stat-number">0</p>
 			<span>Batch number</span>
 
 			<p id="jsTickets" class="stat-number">0</p>
 			<span>Tickets</span>
 
-			<p id="jsTotal" class="stat-number">0</p>
-			<span>Total</span>
 
 			<p id="jsTimesModified" class="stat-number">0</p>
       <span>Times modified</span>
@@ -70,9 +72,9 @@
 		</div>
 	</div>
 
-	<input data-type="number" class="jsResetInput center-align-absolute box-radius" type="text" name="number-input" maxlength="15">
+	<input data-type="number" class="jsHideOnPrint jsResetInput center-align-absolute box-radius" type="text" name="number-input" maxlength="15">
 
-	<button id="jsBtnSaveAndPrint" class="btn center-align-absolute box-radius">Save and Print</button>
+	<button id="jsBtnSaveAndPrint" class="jsHideOnPrint btn center-align-absolute box-radius">Save and Print</button>
 
 	<span class="added-by">Added by <input type="text" name="added-by"></span>
 </div>
