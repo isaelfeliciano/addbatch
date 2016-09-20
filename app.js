@@ -1,5 +1,6 @@
 var shortid = require('shortid');
 
+var count = 1;
 var ticketsValues = [];
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
@@ -25,11 +26,11 @@ $('input[name="added-by"]').on('keydown', (e) => {
 })
 
 function updateNumberFormat() {
-	/*$('input[name="quantity"]').each(function() {
+	$('input[name="quantity"]').each(function() {
 		let value = $(this).val();
 		value = numeral(value).format('0,0.000');
 		$(this).val(value);
-	});*/
+	});
 
 	(function() {
 		let value = $('#jsTotal').text();
@@ -68,6 +69,8 @@ function btnModalSaveNewBatch() {
 	$('#jsBatchNumber').text(batchNumber);
 	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="number-input"]').focus();
+	loadingIn();
+	getAjax(batchNumber);
 }
 
 function btnModalSaveNewUser() {
@@ -109,13 +112,13 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 	}
 });
 
-
 function recalculateBatch() {
 	let tempStorage = [];
-	let ticketsQuantity = parseFloat($('#jsTickets').text());
+	let ticketsQuantity = parseInt($('#jsTickets').text());
 	$('input[name="quantity"]').each(function(i, value) {
 		tempStorage.push(numeral().unformat($(this).val()));
-		if (i == (ticketsQuantity-1)) {
+		if (i == (ticketsQuantity - 1)) {
+			console.log("recalculateBatch");
 			let total = _.sum(tempStorage);
 			$('#jsTotal').text(total);
 			updateNumberFormat();
@@ -123,10 +126,11 @@ function recalculateBatch() {
 	});
 }
 
+
 function addTicketsAndPopulateList(value) {
 	$('.quantity-list').append(
 		`<li>
-			<input class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
+			<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
 			<span>(0)</span>
 		</li>`
 	);
@@ -143,33 +147,28 @@ function addTicketsAndPopulateList(value) {
 	value = numeral().unformat(value);
 	value = parseFloat(value);
 	recalculateBatch();
-	/*ticketsValues.push(value);
-	let sumResult = _.sum(ticketsValues);
-	sumResult = numeral(sumResult).format('0,0.000')
-	$('#jsTotal').text(sumResult);*/
 
-	$('input[name="quantity"]' ).on('keydown', function(e) {
-		var selector = $(this);
+	$('input#'+count).on('keydown', function(e) {
 		if (e.which == 13 || 
 		e.keyCode == 13 || 
 		e.which == 107 ||
 		e.keyCode == 107 ) {
 			e.preventDefault();
-			let value = $(selector).val();
+			let value = $(this).val();
 			value = value.replace('-', '');
-			$(selector).val(value);
+			$(this).val(value);
 			recalculateBatch();
 		}
 
 		if (e.which == 109 || e.keyCode == 109) {
 			e.preventDefault();
-			let value = $(selector).val();
+			let value = $(this).val();
 			value = '-' + value;
-			$(selector).val(value);
-			console.log(value);
+			$(this).val(value);
 			recalculateBatch();
 		}
 	});
+	count++;
 }
 
 var decimal = false;
@@ -269,6 +268,38 @@ function sendJSON(data) {
 				console.log(`success ${data.msg}`);
 				loadingOut(null, 'Batch saved');
 				resetInputs();
+				count = 1;
+			}
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			console.log(errorThrown);
+			loadingOut(true, "Error sending to server")
+		})
+		.always(function(data, textStatus, jqXHR) {
+			console.log("complete");
+			console.log(textStatus);
+		});
+}
+
+function getAjax(data) {
+	$.ajax({
+		url: 'http://localhost:3131/searchBatch',
+		type: 'GET',
+		data: {batchid: data}
+		})
+		.done(function(data, textStatus, jqXHR) {
+			if (data.msg == 'error-searching') {
+				console.log('error-searching');
+				loadingOut(true, 'Error searching for batch');
+			} 
+			if (data.msg == 'batch-exist') {
+				loadingOut(null, 'Batch Exist');
+				resetInputs();
+				$('#btn-create-page').trigger('click');
+				count = 1;
+			}
+			if (data.msg == 'batch-no-exist') {
+				loadingOut(null, 'Batch no exist');
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
@@ -290,4 +321,5 @@ function resetInputs() {
 
 $('#btnCancel').on('click', (e) => {
 	resetInputs();
+	count = 1;
 });
