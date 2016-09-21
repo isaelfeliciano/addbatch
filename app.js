@@ -1,7 +1,21 @@
-var shortid = require('shortid');
+const shortid = require('shortid');
+const fs = require('fs');
+const path = require('path');
+const uniqueTempDir = require('unique-temp-dir');
 var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
+
+const tempDir = uniqueTempDir({create: true, thunk: true});
+var tempFile = path.join(tempDir(), 'test.txt');
+console.log(tempFile);
+
+fs.writeFile(tempFile, "Prueba2", function(err) {
+	if (err) {
+		return console.log(err);
+	}
+	console.log("File was saved");
+});
 
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
