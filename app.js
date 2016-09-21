@@ -1,6 +1,7 @@
 var shortid = require('shortid');
 var count = 1;
 var ticketsValues = [];
+var modifyingBatch = false;
 
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
@@ -42,6 +43,7 @@ updateNumberFormat();
 
 $('#btn-create-page').on('click', (e) => {
 	e.preventDefault();
+	modifyingBatch = false;
 	window.location = "#create-page";
 	$('#jsModalIcon').attr('class', 'fa fa-5x fa-book').text('');
 	$('#jsModalInput').attr('name', 'batchNumber');
@@ -101,7 +103,7 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 	e.keyCode == 107 ) {
 		e.preventDefault();
 		let value = $(this).val();
-		addTicketsAndPopulateList(value);
+		addTicketsAndPopulateList(value, 0);
 	}
 
 	if (e.which == 109 || e.keyCode == 109) {
@@ -123,19 +125,14 @@ $('input[name="search"]').on('keydown', function(e) {
 			$('#jsTimesModified').text(data.modified);
 			$('input[name="added-by"]').val(data.addedBy);
 
+			lS.setItem('batchId', data.id);
 			var tickets = data.tickets;
-			console.log(data);
-			_.forEach(function(ticket, i, tickets) {
-				$('.quantity-list').append(
-					`<li>
-						<input id="${i++}" class="jsResetInput" type="text" name="quantity" value="${ticket.quantity}" maxlength="15"> 
-						<span>${ticket.modified}</span>
-					</li>`
-				);
-				console.log(i);
-				if (i == tickets.length) {
-					console.log("Terminado");
+			_.forEach(tickets, function(ticket, index) {
+				count = index++;
+				addTicketsAndPopulateList(ticket.quantity, ticket.modified);
+				if (index == tickets.length) {
 					location = '#create-page';
+					modifyingBatch = true;
 				}
 			});
 		});
@@ -157,11 +154,11 @@ function recalculateBatch() {
 }
 
 
-function addTicketsAndPopulateList(value) {
+function addTicketsAndPopulateList(value, modified) {
 	$('.quantity-list').append(
 		`<li>
 			<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
-			<span>(0)</span>
+			<span>(${modified})</span>
 		</li>`
 	);
 	$('input[name="number-input"]').val('');
@@ -174,7 +171,9 @@ function addTicketsAndPopulateList(value) {
 
 	$('#jsTickets').text($('.quantity-list').children().length);
 
-	value = numeral().unformat(value);
+	if (typeof(value) == 'string'){
+		value = numeral().unformat(value);
+	}
 	value = parseFloat(value);
 	recalculateBatch();
 
@@ -235,9 +234,14 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 	let total = numeral().unformat($('#jsTotal').text());
 	let modified = $('#jsTimesModified').text();
 	let addedBy = $('input[name="added-by"]').val();
+	if (modifyingBatch === true) {
+		var id = lS.getItem('batchId');
+	} else {
+		var id = shortid.generate();
+	}
 	getTickets(ticketsQuantity, function(tickets){
 		batchObj = {
-			id: shortid.generate(),
+			id: id,
 			batchNumber: batchNumber,
 			ticketsQuantity: ticketsQuantity,
 			total: total,
@@ -287,12 +291,13 @@ function loadingOut(err, text, printAfter) {
 }
 
 function sendJSON(data) {
-	data = JSON.stringify(data);
+	data = localStorage.getItem('batchData');
 	console.log(data);
 	$.ajax({
 		url: 'http://localhost:3131/saveBatchAndPrint',
 		type: 'POST',
-		dataType: 'JSON',
+		dataType: 'json',
+		contentType: 'application/json',
 		data: data,
 		})
 		.done(function(data, textStatus, jqXHR) {
@@ -356,9 +361,9 @@ function resetInputs() {
 	ticketsValues = [];
 }
 
-$('#btnCancel').on('click', (e) => {
-	$('#jsModalInputContainer').addClass('no-display');
+$('.btnCancel').on('click', (e) => {
 	resetInputs();
+	$('#jsModalInputContainer').addClass('no-display');
 	count = 1;
 });
 
