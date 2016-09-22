@@ -7,15 +7,51 @@ var ticketsValues = [];
 var modifyingBatch = false;
 
 const tempDir = uniqueTempDir({create: true, thunk: true});
-var tempFile = path.join(tempDir(), 'test.txt');
+const tempFile = path.join(tempDir(), 'addbatch.txt');
 console.log(tempFile);
 
-fs.writeFile(tempFile, "Prueba2", function(err) {
-	if (err) {
-		return console.log(err);
+var testJSON = {
+	"batchNumber" : 1,
+	"ticketsQuantity" : 2,
+	"total" : 65462,
+	"modified" : "0",
+	"addedBy" : "Rogelio Feliciano",
+	"tickets" : [
+		{
+			"quantity" : 1,
+			"modified" : "0"
+		},
+		{
+			"quantity" : 65461,
+			"modified" : 0
+		}
+	]
+}
+
+var testArray = [];
+
+testTickets = testJSON.tickets;
+_.forEach(testTickets, function(ticket, index) {
+	let quantity = numeral(ticket.quantity).format("0,0.000");
+	testArray.push(`${quantity} (${ticket.modified})`);
+	if (testTickets.length == (index + 1)) {
+		testArray.push("-------------------");
+		testArray.push("Total: " + numeral(testJSON.total).format("0,0.000"));
+		testArray.push(" ");
+		testArray.push("Batch number: " + testJSON.batchNumber);
+		testArray.push(" ");
+		testArray.push("Tickets: " + testJSON.ticketsQuantity);
+		testArray.push(" ");
+		testArray.push("Modified: " + testJSON.modified + "x");
+		printToTextFile(testArray);
 	}
-	console.log("File was saved");
 });
+function printToTextFile(data) {
+	data.forEach(function(line) {
+		fs.appendFileSync(tempFile, line.toString() + "\n");
+	});
+}
+
 
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
