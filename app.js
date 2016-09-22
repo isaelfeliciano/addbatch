@@ -2,13 +2,18 @@ const shortid = require('shortid');
 const fs = require('fs');
 const path = require('path');
 const uniqueTempDir = require('unique-temp-dir');
+const lS = localStorage;
+const exec = require('child_process').exec;
 var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
 
 const tempDir = uniqueTempDir({create: true, thunk: true});
-const tempFile = path.join(tempDir(), 'addbatch.txt');
-console.log(tempFile);
+if (!lS.getItem('tempFile')){
+	var tempFile = path.join(tempDir(), 'addbatch.txt');
+	lS.setItem('tempFile', tempFile);
+}
+console.log(lS.getItem('tempFile'));
 
 var testJSON = {
 	"batchNumber" : 1,
@@ -19,11 +24,11 @@ var testJSON = {
 	"tickets" : [
 		{
 			"quantity" : 1,
-			"modified" : "0"
+			"modified" : "00"
 		},
 		{
 			"quantity" : 65461,
-			"modified" : 0
+			"modified" : "00"
 		}
 	]
 }
@@ -33,22 +38,56 @@ var testArray = [];
 testTickets = testJSON.tickets;
 _.forEach(testTickets, function(ticket, index) {
 	let quantity = numeral(ticket.quantity).format("0,0.000");
-	testArray.push(`${quantity} (${ticket.modified})`);
+	testArray.push(putSpaceInFront(`${quantity} (${ticket.modified})`));
 	if (testTickets.length == (index + 1)) {
-		testArray.push("-------------------");
-		testArray.push("Total: " + numeral(testJSON.total).format("0,0.000"));
-		testArray.push(" ");
-		testArray.push("Batch number: " + testJSON.batchNumber);
-		testArray.push(" ");
-		testArray.push("Tickets: " + testJSON.ticketsQuantity);
-		testArray.push(" ");
-		testArray.push("Modified: " + testJSON.modified + "x");
-		printToTextFile(testArray);
+		let batchStatsArray = [
+			"------------------------",
+			putSpaceInFront(numeral(testJSON.total).format("0,0.000")),
+			putSpaceInFront("Total"),
+			" ",
+			putSpaceInFront(testJSON.batchNumber.toString()),
+			putSpaceInFront("Batch number"),
+			" ",
+			putSpaceInFront(testJSON.ticketsQuantity.toString()),
+			putSpaceInFront("Tickets"),
+			" ",
+			putSpaceInFront(testJSON.modified + "x"),
+			putSpaceInFront("Modified"),
+			" "
+		];
+		_.forEach(batchStatsArray, function(value, index) {
+			testArray.push(value);
+			if (batchStatsArray.length == (index + 1)){
+				printToTextFile(testArray);
+			}
+		});
 	}
 });
+
+function putSpaceInFront(string) {
+	let size = string.length;
+	let difference = 24 - size;
+	return string = ' '.repeat(difference) + string;
+}
+
 function printToTextFile(data) {
-	data.forEach(function(line) {
-		fs.appendFileSync(tempFile, line.toString() + "\n");
+	fs.writeFile(lS.getItem('tempFile'), "", function(err) {
+		if (err) {
+			return console.log("Error cleaning temp file");
+		}
+		data.forEach(function(line) {
+			fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
+		});
+		let pathToFile = lS.getItem('tempFile');
+		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+			if (err) {
+				return console.log("Error sending CMD to print");
+			}
+			if (ste) {
+				console.log(ste);
+			}
+			console.log(sto);
+		});
 	});
 }
 
@@ -59,7 +98,6 @@ Storage.prototype.setObj = function(key, obj) {
 Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
-const lS = localStorage;
 
 if (lS.getItem('firstTime')) {
 	var user = lS.getObj('firstTime');
@@ -153,14 +191,14 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 	e.keyCode == 107 ) {
 		e.preventDefault();
 		let value = $(this).val();
-		addTicketsAndPopulateList(value, 0);
+		addTicketsAndPopulateList(value, "00");
 	}
 
 	if (e.which == 109 || e.keyCode == 109) {
 		e.preventDefault();
 		let value = $(this).val();
 		value = '-' + value;
-		addTicketsAndPopulateList(value);
+		addTicketsAndPopulateList(value, "00");
 	}
 });
 
