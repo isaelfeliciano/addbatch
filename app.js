@@ -37,7 +37,10 @@ function jsonToArray (jsonData) {
 				" ",
 				putSpaceInFront(jsonData.modified + "x"),
 				putSpaceInFront("Modified"),
-				" "
+				" ",
+				putSpaceInFront(jsonData.addedBy),
+				putSpaceInFront("Added by"),
+				" ",
 			];
 			_.forEach(batchStatsArray, function(value, index) {
 				arrayData.push(value);
@@ -67,7 +70,7 @@ function saveToTextFile(data) {
 		let pathToFile = lS.getItem('tempFile');
 
 		// Sending file to printer
-		/*exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
 			if (err) {
 				return console.log("Error sending CMD to print");
 			}
@@ -75,7 +78,7 @@ function saveToTextFile(data) {
 				console.log(ste);
 			}
 			console.log(sto);
-		});*/
+		});
 	});
 }
 
@@ -180,6 +183,11 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 		e.preventDefault();
 		let value = $(this).val();
 		addTicketsAndPopulateList(value, "00");
+		
+		if (modifyingBatch === true) {
+			let modifiedCurrentValue = $('#jsTimesModified').text();
+			lS.setItem('modified', parseInt(modifiedCurrentValue) +1);
+		}
 	}
 
 	if (e.which == 109 || e.keyCode == 109) {
@@ -187,6 +195,11 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 		let value = $(this).val();
 		value = '-' + value;
 		addTicketsAndPopulateList(value, "00");
+
+		if (modifyingBatch === true) {
+			let modifiedCurrentValue = $('#jsTimesModified').text();
+			lS.setItem('modified', parseInt(modifiedCurrentValue) +1);
+		}
 	}
 });
 
@@ -254,6 +267,7 @@ function addTicketsAndPopulateList(value, modified) {
 	recalculateBatch();
 
 	$('input#'+count).on('keydown', function(e) {
+		let $this = $(this);
 		if (e.which == 13 || 
 		e.keyCode == 13 || 
 		e.which == 107 ||
@@ -263,6 +277,7 @@ function addTicketsAndPopulateList(value, modified) {
 			value = value.replace('-', '');
 			$(this).val(value);
 			recalculateBatch();
+			modifying();
 		}
 
 		if (e.which == 109 || e.keyCode == 109) {
@@ -271,6 +286,24 @@ function addTicketsAndPopulateList(value, modified) {
 			value = '-' + value;
 			$(this).val(value);
 			recalculateBatch();
+			modifying();
+		}
+
+		function modifying() {
+			if (modifyingBatch === true) {
+				let modifiedCurrentValue = $('#jsTimesModified').text();
+				lS.setItem('modified', parseInt(modifiedCurrentValue) +1);
+
+				(function ticketModified() {
+					let modifiedCurrentValue = $this.next().text();
+					modifiedCurrentValue = modifiedCurrentValue.replace("(", "").replace(")", "");
+					let modifiedNewValue = parseInt(modifiedCurrentValue) + 1;
+					if (modifiedNewValue.toString().length == 1) {
+						modifiedNewValue = "0"+modifiedNewValue;
+						$this.next().text(`(${modifiedNewValue})`);
+					}
+				})();
+			}
 		}
 	});
 	count++;
@@ -305,17 +338,18 @@ var getTickets = function(tickets, callback) {
 
 $('#jsBtnSaveAndPrint').on('click', (e) => {
     loadingIn();
+    var id;
+	if (modifyingBatch === true) {
+		id = lS.getItem('batchId');
+	} else {
+		id = shortid.generate();
+	}
 	let batchObj = {};
 	let batchNumber = parseInt($('#jsBatchNumber').text());
 	let ticketsQuantity = parseInt($('#jsTickets').text());
 	let total = numeral().unformat($('#jsTotal').text());
-	let modified = $('#jsTimesModified').text();
+	let modified = lS.getItem('modified');
 	let addedBy = $('input[name="added-by"]').val();
-	if (modifyingBatch === true) {
-		var id = lS.getItem('batchId');
-	} else {
-		var id = shortid.generate();
-	}
 	getTickets(ticketsQuantity, function(tickets){
 		batchObj = {
 			id: id,

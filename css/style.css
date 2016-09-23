@@ -216,13 +216,13 @@ header h2 {
 }
 
 .container .left-col {
-    width: 75%;
+    width: 65%;
     position: relative;
     top: 5em;
 }
 .stat-number {
     height: 0.9em;
-    font-size: 5em;
+    font-size: 4.5em;
     border: 2px solid #eaeaea;
     background-color: #eaeaea;
     color: #1f3064;
@@ -235,7 +235,7 @@ header h2 {
 }
 
 .container .right-col {
-    width: 30%;
+    width: 35%;
 	height: 90%;
     right: 1.5em;
     position: absolute;
