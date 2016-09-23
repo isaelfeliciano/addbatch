@@ -8,6 +8,7 @@ var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
 
+// Create temp directory
 const tempDir = uniqueTempDir({create: true, thunk: true});
 if (!lS.getItem('tempFile')){
 	var tempFile = path.join(tempDir(), 'addbatch.txt');
@@ -15,54 +16,38 @@ if (!lS.getItem('tempFile')){
 }
 console.log(lS.getItem('tempFile'));
 
-var testJSON = {
-	"batchNumber" : 1,
-	"ticketsQuantity" : 2,
-	"total" : 65462,
-	"modified" : "0",
-	"addedBy" : "Rogelio Feliciano",
-	"tickets" : [
-		{
-			"quantity" : 1,
-			"modified" : "00"
-		},
-		{
-			"quantity" : 65461,
-			"modified" : "00"
+function jsonToArray (jsonData) {
+	jsonData = JSON.parse(jsonData);
+	var tickets = jsonData.tickets;
+	var arrayData = [];
+	_.forEach(tickets, function(ticket, index) {
+		let quantity = numeral(ticket.quantity).format("0,0.000");
+		arrayData.push(putSpaceInFront(`${quantity} (${ticket.modified})`));
+		if (tickets.length == (index + 1)) {
+			let batchStatsArray = [
+				"------------------------",
+				putSpaceInFront(numeral(jsonData.total).format("0,0.000")),
+				putSpaceInFront("Total"),
+				" ",
+				putSpaceInFront(jsonData.batchNumber.toString()),
+				putSpaceInFront("Batch number"),
+				" ",
+				putSpaceInFront(jsonData.ticketsQuantity.toString()),
+				putSpaceInFront("Tickets"),
+				" ",
+				putSpaceInFront(jsonData.modified + "x"),
+				putSpaceInFront("Modified"),
+				" "
+			];
+			_.forEach(batchStatsArray, function(value, index) {
+				arrayData.push(value);
+				if (batchStatsArray.length == (index + 1)){
+					saveToTextFile(arrayData);
+				}
+			});
 		}
-	]
+	});
 }
-
-var testArray = [];
-
-testTickets = testJSON.tickets;
-_.forEach(testTickets, function(ticket, index) {
-	let quantity = numeral(ticket.quantity).format("0,0.000");
-	testArray.push(putSpaceInFront(`${quantity} (${ticket.modified})`));
-	if (testTickets.length == (index + 1)) {
-		let batchStatsArray = [
-			"------------------------",
-			putSpaceInFront(numeral(testJSON.total).format("0,0.000")),
-			putSpaceInFront("Total"),
-			" ",
-			putSpaceInFront(testJSON.batchNumber.toString()),
-			putSpaceInFront("Batch number"),
-			" ",
-			putSpaceInFront(testJSON.ticketsQuantity.toString()),
-			putSpaceInFront("Tickets"),
-			" ",
-			putSpaceInFront(testJSON.modified + "x"),
-			putSpaceInFront("Modified"),
-			" "
-		];
-		_.forEach(batchStatsArray, function(value, index) {
-			testArray.push(value);
-			if (batchStatsArray.length == (index + 1)){
-				printToTextFile(testArray);
-			}
-		});
-	}
-});
 
 function putSpaceInFront(string) {
 	let size = string.length;
@@ -70,16 +55,19 @@ function putSpaceInFront(string) {
 	return string = ' '.repeat(difference) + string;
 }
 
-function printToTextFile(data) {
+function saveToTextFile(data) {
 	fs.writeFile(lS.getItem('tempFile'), "", function(err) {
 		if (err) {
 			return console.log("Error cleaning temp file");
 		}
 		data.forEach(function(line) {
 			fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
+			console.log(`File saved in ${lS.getItem('tempFile')}`);
 		});
 		let pathToFile = lS.getItem('tempFile');
-		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+
+		// Sending file to printer
+		/*exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
 			if (err) {
 				return console.log("Error sending CMD to print");
 			}
@@ -87,7 +75,7 @@ function printToTextFile(data) {
 				console.log(ste);
 			}
 			console.log(sto);
-		});
+		});*/
 	});
 }
 
@@ -307,7 +295,8 @@ var getTickets = function(tickets, callback) {
 		let obj = {};
 		obj.quantity = numeral().unformat($(this).val());
 		obj.modified = $(this).next().text();
-		obj.modified = numeral(obj.modified).format();
+		obj.modified = obj.modified.replace('(' ,'').
+			replace(')', '');
 		resultArray.push(obj);
 		if (i == (tickets-1))
 			callback(resultArray);
@@ -380,7 +369,6 @@ function loadingOut(err, text, printAfter) {
 
 function sendJSON(data) {
 	data = localStorage.getItem('batchData');
-	console.log(data);
 	$.ajax({
 		url: 'http://localhost:3131/saveBatchAndPrint',
 		type: 'POST',
@@ -394,7 +382,7 @@ function sendJSON(data) {
 				loadingOut(true, 'Error Saving to DB');
 			} else {
 				console.log(`success ${data.msg}`);
-				loadingOut(null, 'Batch saved', printTape);
+				loadingOut(null, 'Batch saved', jsonToArray(lS.getItem('batchData')));
 				count = 1;
 			}
 		})
@@ -455,6 +443,7 @@ $('.btnCancel').on('click', (e) => {
 	count = 1;
 });
 
+// Print from HTML
 function printTape() {
 	hideOnPrint();
 	window.print({
