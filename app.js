@@ -8,12 +8,20 @@ var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
 
-// Create temp directory
-const tempDir = uniqueTempDir({create: true, thunk: true});
-if (!lS.getItem('tempFile')){
-	var tempFile = path.join(tempDir(), 'addbatch.txt');
-	lS.setItem('tempFile', tempFile);
+
+try {
+	fs.statSync(lS.getItem('tempFile'));
+	console.log("File exist");
 }
+catch(e) {
+	let tempDir = uniqueTempDir({create: true, thunk: true});
+	console.log("File does not exist");
+	let tempFile = path.join(tempDir(), 'addbatch.txt');
+	lS.setItem('tempFile', tempFile);
+	console.log("File Creado");
+	fs.writeFile(tempFile, "");
+}
+
 console.log(lS.getItem('tempFile'));
 
 function jsonToArray (jsonData) {
@@ -90,18 +98,18 @@ Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
 
-if (lS.getItem('firstTime')) {
-	var user = lS.getObj('firstTime');
-	$('input[name="added-by"]').val(user.userName);
+if (lS.getItem('userName')) {
+	var user = lS.getItem('userName');
+	$('input[name="added-by"]').val(user);
 }
 
 $('input[name="added-by"]').on('keydown', (e) => {
 	if (e.which == 13 || e.keyCode == 13) {
 		e.preventDefault();
-		let input = $('input[name="added-by"]')
+		let input = $('input[name="added-by"]');
 		input.blur();
 		$('body').focus();
-		lS.setObj('firstTime', {userName: input.val()})
+		lS.setItem('userName', input.val());
 	}
 })
 
@@ -156,17 +164,15 @@ function btnModalSaveNewBatch() {
 
 function btnModalSaveNewUser() {
 	let userName = $('input[name="user"]').val();
-	let firstTime = {userName: userName};
-	firstTime = JSON.stringify(firstTime);
-	lS.setItem('firstTime', firstTime);
+	lS.setItem('userName', userName);
 	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="added-by"]').val(userName);
 	$('input[name="user"]').val('');
 	$('input[name="search"]').focus();
 }
 
-// lS.removeItem('firstTime');
-if (!lS.getItem('firstTime')) {
+// lS.removeItem('userName');
+if (!lS.getItem('userName')) {
 	$('#jsModalInputContainer').removeClass('no-display');
 	$('input[name="user"]').focus();
 	$('.jsModalBtnSave').on('click', function(e) {
@@ -213,6 +219,7 @@ $('input[name="search"]').on('keydown', function(e) {
 			$('#jsTickets').text(data.ticketsQuantity);
 			$('#jsTimesModified').text(data.modified);
 			$('input[name="added-by"]').val(data.addedBy);
+			console.log(data.addedBy);
 
 			lS.setItem('batchId', data.id);
 			var tickets = data.tickets;
@@ -349,7 +356,7 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 	let ticketsQuantity = parseInt($('#jsTickets').text());
 	let total = numeral().unformat($('#jsTotal').text());
 	let modified = lS.getItem('modified');
-	let addedBy = $('input[name="added-by"]').val();
+	let addedBy = lS.getItem('userName');
 	getTickets(ticketsQuantity, function(tickets){
 		batchObj = {
 			id: id,
