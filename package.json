@@ -3,22 +3,23 @@
   "version": "1.0.0",
   "description": "Inventory's batch adding tape",
   "main": "index.html",
-	"window": {
-		"title": "AddBatch, Fenix MFG",
-		"icon": "icon-96.png",
-		"resizable":false,
-		"fullscreen": false,
-		"width": 800,
-		"height": 600
-	},
+  "window": {
+    "title": "AddBatch, Fenix MFG",
+    "icon": "icon-96.png",
+    "resizable": false,
+    "fullscreen": false,
+    "width": 800,
+    "height": 600
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/isaelfeliciano/addbatch.git"
   },
   "dependencies": {
+    "log4js": "^0.6.38",
+    "node-printer": "latest",
     "shortid": "latest",
-    "unique-temp-dir": "latest",
-    "node-printer": "latest"
+    "unique-temp-dir": "latest"
   },
   "keywords": [
     "inventory",

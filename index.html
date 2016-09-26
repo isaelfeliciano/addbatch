@@ -9,6 +9,9 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+<div class="flashmessage center-align-absolute center-text notVisible"></div>
+</div>
+
 <div id="jsModalInputContainer" class="modal no-display">
     <div class="modal__box center-align-absolute center-text box-radius">
     	<a class="btnCancel modal__box__btn-cancel" href="#main-page">Cancel</a>
@@ -29,12 +32,12 @@
 	<img class="img-main-page center-align" src="img/fenix-mfg-logo.png">
 
 	<h1>AddBatch</h1>
-	<h2>Create an inventory's batch adding tape</h2>
+	<h2>Create a digital adding tape</h2>
 
 	<input class="search-batch center-align box-radius" type="text" name="search" placeholder="000">
 
-	<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Create Tape</button>
-	<button class="btn center-align box-radius"><i class="fa">&#xf14b</i> Edit Tape</button>
+	<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Add new batch</button>
+	<button id="btn-edit-batch" class="btn center-align box-radius"><i class="fa">&#xf14b</i> Edit batch</button>
 </div>
 
 
@@ -44,10 +47,22 @@
 
 		<h2 class="header-app-title center-align-absolute center-text">AddBatch</h2>
 		
-		<ul class="navigation">
+		<!-- <ul class="navigation">
 			<li><a class="btnCancel" href="#main-page">Cancel</a></li>
 			<li><a href="#main-page">Home</a></li>
-		</ul>
+		</ul> -->
+
+		<a class="toggle-nav" href="#"><i class="fa fa-2x fa-bars"></i></a>
+		<nav class="header-menu no-display">
+			<ul>
+				<li><a class="btnPrint" href="#"><i class="fa fa-print"></i> Print</a></li>
+
+				<li><a class="btnCancel" href="#main-page"><i class="fa fa-ban"></i> Cancel</a></li>
+
+				<li><a class="btnDelete" href="#"><i class="fa fa-trash"></i> Delete batch</a></li>
+			</ul>
+
+		</nav>
 	</header>
 
 	<div class="container">

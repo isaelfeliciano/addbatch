@@ -7,24 +7,39 @@ const exec = require('child_process').exec;
 var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
+var log4js = require('log4js');
 
+// log4js.replaceConsole();
+log4js.configure({
+	appenders: [
+		{type: 'console'},
+		{
+			type: 'file', 
+			filename: 'logs/addbatch.log'
+		}
+	],
+	replaceConsole: true
+})
+var logger = log4js.getLogger();
+logger.setLevel("ERROR");
 
 try {
 	fs.statSync(lS.getItem('tempFile'));
-	console.log("File exist");
+	logger.info("File exist");
 }
 catch(e) {
 	let tempDir = uniqueTempDir({create: true, thunk: true});
-	console.log("File does not exist");
+	logger.info("File does not exist");
 	let tempFile = path.join(tempDir(), 'addbatch.txt');
 	lS.setItem('tempFile', tempFile);
-	console.log("File Creado");
+	logger.info("File Creado");
 	fs.writeFile(tempFile, "");
 }
 
 console.log(lS.getItem('tempFile'));
 
 function jsonToArray (jsonData) {
+	loadingIn();
 	jsonData = JSON.parse(jsonData);
 	var tickets = jsonData.tickets;
 	var arrayData = [];
@@ -69,22 +84,25 @@ function putSpaceInFront(string) {
 function saveToTextFile(data) {
 	fs.writeFile(lS.getItem('tempFile'), "", function(err) {
 		if (err) {
-			return console.log("Error cleaning temp file");
+			return logger.error("Error cleaning temp file");
 		}
 		data.forEach(function(line) {
 			fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
-			console.log(`File saved in ${lS.getItem('tempFile')}`);
+			logger.info(`File saved in ${lS.getItem('tempFile')}`);
 		});
 		let pathToFile = lS.getItem('tempFile');
 
 		// Sending file to printer
 		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
 			if (err) {
-				return console.log("Error sending CMD to print");
+				loadingOut(err, "Error printing");
+				return logger.error("Error sending CMD to print");
 			}
 			if (ste) {
-				console.log(ste);
+				loadingOut(ste, "Error printing");
+				logger.error(ste);
 			}
+			loadingOut(null, "Printing batch");
 			console.log(sto);
 		});
 	});
@@ -155,6 +173,9 @@ $('#jsModalInput').on('keydown', (e) => {
 
 function btnModalSaveNewBatch() {
 	let batchNumber = $('#jsModalInput').val();
+	if (batchNumber == 0) {
+		return flashMessage("Batch number can't be 0");
+	}
 	$('#jsBatchNumber').text(batchNumber);
 	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="number-input"]').focus();
@@ -219,7 +240,6 @@ $('input[name="search"]').on('keydown', function(e) {
 			$('#jsTickets').text(data.ticketsQuantity);
 			$('#jsTimesModified').text(data.modified);
 			$('input[name="added-by"]').val(data.addedBy);
-			console.log(data.addedBy);
 
 			lS.setItem('batchId', data.id);
 			var tickets = data.tickets;
@@ -233,6 +253,10 @@ $('input[name="search"]').on('keydown', function(e) {
 			});
 		});
 	}
+});
+$('#btn-edit-batch').on('click', function(e) {
+	e.preventDefault();
+	$('input[name="search"]').trigger({type: "keydown", keyCode: 13});;
 });
 
 function recalculateBatch() {
@@ -253,8 +277,10 @@ function recalculateBatch() {
 function addTicketsAndPopulateList(value, modified) {
 	$('.quantity-list').append(
 		`<li>
+			<label for="quantity" class="quantity-icon fa fa-pencil">
 			<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
 			<span>(${modified})</span>
+			</label>
 		</li>`
 	);
 	$('input[name="number-input"]').val('');
@@ -297,6 +323,7 @@ function addTicketsAndPopulateList(value, modified) {
 		}
 
 		function modifying() {
+			console.log("Modifiying");
 			if (modifyingBatch === true) {
 				let modifiedCurrentValue = $('#jsTimesModified').text();
 				lS.setItem('modified', parseInt(modifiedCurrentValue) +1);
@@ -350,6 +377,7 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 		id = lS.getItem('batchId');
 	} else {
 		id = shortid.generate();
+		lS.setItem('modified', $('#jsTimesModified').text());
 	}
 	let batchObj = {};
 	let batchNumber = parseInt($('#jsBatchNumber').text());
@@ -419,16 +447,17 @@ function sendJSON(data) {
 		})
 		.done(function(data, textStatus, jqXHR) {
 			if (data.msg == 'error-saving') {
-				console.log('error-saving');
-				loadingOut(true, 'Error Saving to DB');
+				logger.error('Error saving to DB');
+				loadingOut(true, 'Error saving to DB');
 			} else {
-				console.log(`success ${data.msg}`);
+				logger.info(`success ${data.msg}`);
 				loadingOut(null, 'Batch saved', jsonToArray(lS.getItem('batchData')));
 				count = 1;
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(errorThrown);
+			flashMessage("Couldn't connect to server");
+			logger.error("Error sending request");
 			loadingOut(true, "Error sending to server")
 		})
 		.always(function(data, textStatus, jqXHR) {
@@ -445,7 +474,7 @@ function getAjax(data, route, callback) {
 		})
 		.done(function(data, textStatus, jqXHR) {
 			if (data.msg == 'error-searching') {
-				console.log('error-searching');
+				logger.error('Error in search for batch');
 				loadingOut(true, 'Error searching for batch');
 			} 
 			if (data.msg == 'batch-exist') {
@@ -462,7 +491,8 @@ function getAjax(data, route, callback) {
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(errorThrown);
+			flashMessage("Couldn't connect to server");
+			logger.error("Error sending request");
 			loadingOut(true, "Error sending to server")
 		})
 		.always(function(data, textStatus, jqXHR) {
@@ -473,7 +503,7 @@ function getAjax(data, route, callback) {
 
 function resetInputs() {
 	$('.jsResetInput').val('');
-	$('#jsBatchNumber, #jsTotal, #jsTickets').text('0');
+	$('#jsBatchNumber, #jsTotal, #jsTickets, #jsTimesModified').text('0');
 	$('.quantity-list').empty();
 	ticketsValues = [];
 }
@@ -482,6 +512,18 @@ $('.btnCancel').on('click', (e) => {
 	resetInputs();
 	$('#jsModalInputContainer').addClass('no-display');
 	count = 1;
+	if (!$('.header-menu').hasClass('no-display')){
+		$('.header-menu').addClass('no-display');
+	}
+});
+
+$('.btnPrint').on('click', (e) => {
+	e.preventDefault();
+	$('.header-menu').addClass('no-display');
+	if (modifyingBatch === true) {
+		return jsonToArray(lS.getItem('batchData'));
+	}
+	flashMessage("You have to save it first"); 
 });
 
 // Print from HTML
@@ -498,3 +540,21 @@ function printTape() {
 function hideOnPrint() {
 	$('.jsHideOnPrint').toggleClass('no-display');
 }
+
+// Flash Message
+function flashMessage(msg){
+	if(hideFlashMessage)
+		clearTimeout(hideFlashMessage);
+	$('.flashmessage').removeClass('notVisible')
+	.html('<p>'+msg+'</p>');
+	var hideFlashMessage = setTimeout(function(){
+		$('.flashmessage').addClass('notVisible').
+		html('');
+	}, 3000);
+}
+// Flash Message
+
+$('.toggle-nav').on('click', function(e) {
+	e.preventDefault();
+	$('.header-menu').toggleClass('no-display');
+});

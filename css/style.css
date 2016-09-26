@@ -30,7 +30,7 @@ Success color: 		 #667092
 .box-radius{
   border-radius: 5px;
 }
-.not-visible{
+.not-visible, .notVisible {
 /*  visibility: hidden;*/
 	opacity: 0;
 	-webkit-transition:opacity 1s linear;
@@ -45,6 +45,23 @@ Success color: 		 #667092
 
 
 /* ---- HELPERS ----<<<<*/
+
+/*Flashmessge*/
+.flashmessage{
+  left: 5em;
+  position: absolute;
+  top: 4em;
+  width: 80%;
+  
+  background: #fff;
+  border-top: 0.4em solid #04193F;
+
+  z-index: 99999;
+}
+.flashmessage>p{
+  padding: 1em;
+}
+/*Flashmessge*/
 
 body, html {
 	width: 100%;
@@ -160,7 +177,7 @@ input:focus {
 }
 
 .btn {
-	width: 10em;
+	width: 11em;
 	height: 1.5em;
 	background-color: #f5a04c;
 	color: #FFF;
@@ -190,6 +207,55 @@ header img {
 header h2 {
     position: absolute;
     top: 0.6em;
+}
+
+.toggle-nav {
+    margin: 0;
+    padding: 0;
+    top: 0.8em;
+    right: 1em;
+    position: absolute;
+    color: #F5A04C;
+}
+
+.header-menu {
+    width: 13em;
+    padding: 10px 5px;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.5);
+    border-radius: 3px;
+    background: #1F3064;
+    position: absolute;
+    top: 4em;
+    /*text-align: right;*/
+    right: 1em;
+    z-index: 15;
+}
+
+.header-menu ul {
+    display: inline-block;
+}
+
+
+.header-menu li {
+    margin: 1em 0.5em 0em 0em;
+    list-style: none;
+}
+
+
+.header-menu a {
+    color: #FFF;
+    transition:color linear 0.15s;
+    font-size: 1.3em;
+}
+
+.header-menu a:hover {
+    text-decoration: none;
+    color: #F5A04C;
+}
+
+.header-menu i {
+    margin-left: 0.1em;
+    margin-right: 0.5em;
 }
 
 .navigation {
@@ -258,9 +324,18 @@ header h2 {
     display: inline;
 	width: 9em;
 }
-/*.quantity-list li:nth-of-type(even) > input {
+.quantity-list li:nth-of-type(even) > input {
 	opacity: 0.7;
-}*/
+}
+
+/*This is a hack for show icon on hover in input*/
+.quantity-icon {
+    color: #EAEAEA;
+}
+.quantity-icon:hover {
+    color: #1F3064;
+}
+
 .quantity-list li input:focus,
 #create-page input[name="added-by"]:focus {
 	color: #f5a04c;
@@ -272,6 +347,7 @@ header h2 {
 .quantity-list li span {
 	display: inline;
     font-size: 0.88em;
+    color: #1F3064;
 }
 
 #create-page input[name="number-input"] {
