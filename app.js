@@ -1,3 +1,4 @@
+const addbatchServerURL = process.env.ADDBATCH_SERVER_URL;
 const shortid = require('shortid');
 const fs = require('fs');
 const path = require('path');
@@ -439,7 +440,7 @@ function loadingOut(err, text, printAfter) {
 function sendJSON(data) {
 	data = localStorage.getItem('batchData');
 	$.ajax({
-		url: 'http://localhost:3131/saveBatchAndPrint',
+		url: addbatchServerURL + 'saveBatchAndPrint',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -468,13 +469,14 @@ function sendJSON(data) {
 
 function getAjax(data, route, callback) {
 	$.ajax({
-		url: 'http://localhost:3131/'+route,
+		url: addbatchServerURL+route,
 		type: 'GET',
 		data: {batchid: data}
 		})
 		.done(function(data, textStatus, jqXHR) {
 			if (data.msg == 'error-searching') {
 				logger.error('Error in search for batch');
+				flashMessage("Error in search for batch");
 				loadingOut(true, 'Error searching for batch');
 			} 
 			if (data.msg == 'batch-exist') {
@@ -484,6 +486,7 @@ function getAjax(data, route, callback) {
 				count = 1;
 			}
 			if (data.msg == 'batch-no-exist') {
+				flashMessage("Batch does not exist yet");
 				loadingOut(null, 'Batch no exist');
 			}
 			if (callback) {
