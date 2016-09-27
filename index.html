@@ -20,6 +20,15 @@
         <button class="jsModalBtnSave btn center-align box-radius">Save</button>
     </div>
 </div>
+
+<div id="jsModalDeleteContainer" class="modal no-display">
+    <div class="modal__box center-align-absolute center-text box-radius">
+    	<a class="btnCancel modal__box__btn-cancel" href="#main-page">Cancel</a>
+        <i id="jsModalIcon" class="fa fa-5x fa-trash"></i>
+        <p>Sure you want delete this batch?</p>
+        <button class="jsModalBtnDelete btn btn--red center-align box-radius">Delete</button>
+    </div>
+</div>
 	
 <div id="jsModalLoading" class="no-display modal modal--loading  animated">
 	<div class="modal__box modal__box--loading center-align-absolute center-text box-radius">
@@ -36,8 +45,10 @@
 
 	<input class="search-batch center-align box-radius" type="text" name="search" placeholder="000">
 
+	<button id="btn-edit-batch" class="btn btn--blue center-align box-radius"><i class="fa">&#xf14b</i> View batch</button>
+
+
 	<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Add new batch</button>
-	<button id="btn-edit-batch" class="btn center-align box-radius"><i class="fa">&#xf14b</i> Edit batch</button>
 </div>
 
 
@@ -55,13 +66,12 @@
 		<a class="toggle-nav" href="#"><i class="fa fa-2x fa-bars"></i></a>
 		<nav class="header-menu no-display">
 			<ul>
-				<li><a class="btnPrint" href="#"><i class="fa fa-print"></i> Print</a></li>
+				<li><a class="btnCancel" href="#main-page"><i class="fa fa-chevron-left"></i> Back</a></li>
 
-				<li><a class="btnCancel" href="#main-page"><i class="fa fa-ban"></i> Cancel</a></li>
+				<li><a class="btnPrint" href="#"><i class="fa fa-print"></i> Print</a></li>
 
 				<li><a class="btnDelete" href="#"><i class="fa fa-trash"></i> Delete batch</a></li>
 			</ul>
-
 		</nav>
 	</header>
 

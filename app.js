@@ -40,7 +40,7 @@ catch(e) {
 console.log(lS.getItem('tempFile'));
 
 function jsonToArray (jsonData) {
-	loadingIn();
+	// loadingIn();
 	jsonData = JSON.parse(jsonData);
 	var tickets = jsonData.tickets;
 	var arrayData = [];
@@ -94,7 +94,10 @@ function saveToTextFile(data) {
 		let pathToFile = lS.getItem('tempFile');
 
 		// Sending file to printer
-		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+		flashMessage("Printing batch");
+		resetInputs();
+		window.location = "#main-page";
+		/*exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
 			if (err) {
 				loadingOut(err, "Error printing");
 				return logger.error("Error sending CMD to print");
@@ -105,7 +108,9 @@ function saveToTextFile(data) {
 			}
 			loadingOut(null, "Printing batch");
 			console.log(sto);
-		});
+			resetInputs();
+			window.location = "#main-page";
+		});*/
 	});
 }
 
@@ -149,6 +154,11 @@ updateNumberFormat();
 
 $('#btn-create-page').on('click', (e) => {
 	e.preventDefault();
+	resetInputs();
+	if (!$('.btnDelete').hasClass('btnDelete--disabled')){
+		$('.btnDelete').addClass('btnDelete--disabled');
+		$('.btnPrint').addClass('btnPrint--disabled');
+	}
 	modifyingBatch = false;
 	window.location = "#create-page";
 	$('#jsModalIcon').attr('class', 'fa fa-5x fa-book').text('');
@@ -242,6 +252,7 @@ $('input[name="search"]').on('keydown', function(e) {
 			$('#jsTimesModified').text(data.modified);
 			$('input[name="added-by"]').val(data.addedBy);
 
+			lS.setItem('batchData', JSON.stringify(data));
 			lS.setItem('batchId', data.id);
 			var tickets = data.tickets;
 			_.forEach(tickets, function(ticket, index) {
@@ -257,6 +268,10 @@ $('input[name="search"]').on('keydown', function(e) {
 });
 $('#btn-edit-batch').on('click', function(e) {
 	e.preventDefault();
+	if ($('.btnDelete').hasClass('btnDelete--disabled')) {
+		$('.btnDelete').removeClass('btnDelete--disabled');
+		$('.btnPrint').removeClass('btnPrint--disabled');
+	}
 	$('input[name="search"]').trigger({type: "keydown", keyCode: 13});;
 });
 
@@ -514,6 +529,7 @@ function resetInputs() {
 $('.btnCancel').on('click', (e) => {
 	resetInputs();
 	$('#jsModalInputContainer').addClass('no-display');
+	$('#jsModalDeleteContainer').addClass('no-display');
 	count = 1;
 	if (!$('.header-menu').hasClass('no-display')){
 		$('.header-menu').addClass('no-display');
@@ -522,12 +538,43 @@ $('.btnCancel').on('click', (e) => {
 
 $('.btnPrint').on('click', (e) => {
 	e.preventDefault();
+
+	if($('.btnPrint').hasClass('btnPrint--disabled')) {
+		return;
+	}
+
 	$('.header-menu').addClass('no-display');
 	if (modifyingBatch === true) {
 		return jsonToArray(lS.getItem('batchData'));
 	}
 	flashMessage("You have to save it first"); 
 });
+
+$('.btnDelete').on('click', (e) => {
+	e.preventDefault();
+
+	if($('.btnDelete').hasClass('btnDelete--disabled')) {
+		return;
+	}
+
+	$('#jsModalDeleteContainer').removeClass('no-display');
+	$('.header-menu').addClass('no-display');;
+});
+
+$('.jsModalBtnDelete').on('click', (e) => {
+	e.preventDefault();
+	$('#jsModalDeleteContainer').addClass('no-display');
+	let batchID = lS.getObj('batchData').id;
+	getAjax(batchID, "deleteBatch", (data) => {
+		if (data == "error-deleting-batch") {
+			log4js.info("Batch not deleted");
+			return flashMessage("Batch not deleted");
+		}
+		flashMessage("Batch deleted");
+		resetInputs();
+		window.location = "#main-page";
+	});
+})
 
 // Print from HTML
 function printTape() {

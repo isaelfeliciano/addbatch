@@ -167,7 +167,10 @@ input:focus {
 
 #main-page .btn {
 	position: relative;
-	top: 10%;
+}
+
+#main-page #btn-create-page {
+    top: 3em;
 }
 
 #main-page .btn i {
@@ -185,6 +188,15 @@ input:focus {
 	margin-top: 0.5em;
     cursor: pointer;
 }
+
+.btn--blue {
+    background-color: #1F3064;
+}
+
+.btn--red {
+    background-color: #C44640;
+}
+
 
 #create-page {
     position: relative;
@@ -255,6 +267,13 @@ header h2 {
 .header-menu i {
     margin-left: 0.1em;
     margin-right: 0.5em;
+}
+
+.header-menu .btnPrint--disabled,
+.header-menu .btnPrint--disabled:hover,
+.header-menu .btnDelete--disabled,
+.header-menu .btnDelete--disabled:hover {
+    color: grey;
 }
 
 .navigation {
