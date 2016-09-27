@@ -10,13 +10,30 @@ var ticketsValues = [];
 var modifyingBatch = false;
 var log4js = require('log4js');
 
+
+try {
+	fs.statSync(lS.getItem('tempFile'));
+	// logger.info("File exist");
+}
+catch(e) {
+	let tempDir = uniqueTempDir({create: true, thunk: true});
+	// logger.info("File does not exist");
+	let tempFile = path.join(tempDir(), 'addbatch.txt');
+	lS.setItem('tempFile', tempFile);
+	lS.setItem('tempDir', tempDir());
+	// logger.info("File Creado");
+	fs.writeFile(tempFile, "");
+}
+console.log(lS.getItem('tempFile'));
+
 // log4js.replaceConsole();
+var tempLog = path.join(lS.getItem('tempDir'), 'addbatch.log');
 log4js.configure({
 	appenders: [
 		{type: 'console'},
 		{
 			type: 'file', 
-			filename: 'logs/addbatch.log'
+			filename: tempLog
 		}
 	],
 	replaceConsole: true
@@ -24,20 +41,6 @@ log4js.configure({
 var logger = log4js.getLogger();
 logger.setLevel("ERROR");
 
-try {
-	fs.statSync(lS.getItem('tempFile'));
-	logger.info("File exist");
-}
-catch(e) {
-	let tempDir = uniqueTempDir({create: true, thunk: true});
-	logger.info("File does not exist");
-	let tempFile = path.join(tempDir(), 'addbatch.txt');
-	lS.setItem('tempFile', tempFile);
-	logger.info("File Creado");
-	fs.writeFile(tempFile, "");
-}
-
-console.log(lS.getItem('tempFile'));
 
 function jsonToArray (jsonData) {
 	// loadingIn();
@@ -97,7 +100,7 @@ function saveToTextFile(data) {
 		flashMessage("Printing batch");
 		resetInputs();
 		window.location = "#main-page";
-		/*exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
 			if (err) {
 				loadingOut(err, "Error printing");
 				return logger.error("Error sending CMD to print");
@@ -110,7 +113,7 @@ function saveToTextFile(data) {
 			console.log(sto);
 			resetInputs();
 			window.location = "#main-page";
-		});*/
+		});
 	});
 }
 
