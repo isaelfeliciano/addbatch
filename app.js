@@ -9,6 +9,9 @@ var count = 1;
 var ticketsValues = [];
 var modifyingBatch = false;
 var log4js = require('log4js');
+var windowLocation = window.location;
+var gui = require('nw.gui');
+var win = gui.Window.get();
 
 
 try {
@@ -66,8 +69,7 @@ function jsonToArray (jsonData) {
 				putSpaceInFront("Modified"),
 				" ",
 				putSpaceInFront(jsonData.addedBy),
-				putSpaceInFront("Added by"),
-				" ",
+				putSpaceInFront("Added by")
 			];
 			_.forEach(batchStatsArray, function(value, index) {
 				arrayData.push(value);
@@ -86,35 +88,37 @@ function putSpaceInFront(string) {
 }
 
 function saveToTextFile(data) {
+	console.log(data.length);
 	fs.writeFile(lS.getItem('tempFile'), "", function(err) {
 		if (err) {
 			return logger.error("Error cleaning temp file");
 		}
-		data.forEach(function(line) {
-			fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
-			logger.info(`File saved in ${lS.getItem('tempFile')}`);
-		});
-		let pathToFile = lS.getItem('tempFile');
-
-		// Sending file to printer
-		flashMessage("Printing batch");
-		resetInputs();
-		window.location = "#main-page";
-		exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
-			if (err) {
-				loadingOut(err, "Error printing");
-				return logger.error("Error sending CMD to print");
-			}
-			if (ste) {
-				loadingOut(ste, "Error printing");
-				logger.error(ste);
-			}
-			loadingOut(null, "Printing batch");
-			console.log(sto);
-			resetInputs();
-			window.location = "#main-page";
-		});
 	});
+	var dataCounter = 0;
+	data.forEach(function(line) {
+		dataCounter++;
+		fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
+		logger.info(`File saved in ${lS.getItem('tempFile')}`);
+		if (data.length === dataCounter) {
+			// Sending file to printer
+			let pathToFile = lS.getItem('tempFile');
+			flashMessage("Printing batch");
+			window.location = "#main-page";
+			resetInputs();
+			exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+				if (err) {
+					loadingOut(err, "Error printing");
+					return logger.error("Error sending CMD to print");
+				}
+				if (ste) {
+					loadingOut(ste, "Error printing");
+					logger.error(ste);
+				}
+				loadingOut(null, "Printing batch");
+				console.log(sto);
+			});
+		}
+	});	
 }
 
 
@@ -247,8 +251,16 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 $('input[name="search"]').on('keydown', function(e) {
 	if (e.which == 13 || e.keyCode == 13) {
 		e.preventDefault();
+
+		if ($('.btnDelete').hasClass('btnDelete--disabled')) {
+			$('.btnDelete').removeClass('btnDelete--disabled');
+			$('.btnPrint').removeClass('btnPrint--disabled');
+		}
+
 		let batchNumber = $(this).val();
+		flashMessage("Searching Batch");
 		getAjax(batchNumber, 'searchBatchGetJSON', function(data) {
+			flashMessage("Batch loaded");
 			$('#jsTotal').text(data.total);
 			$('#jsBatchNumber').text(data.batchNumber);
 			$('#jsTickets').text(data.ticketsQuantity);
@@ -271,10 +283,6 @@ $('input[name="search"]').on('keydown', function(e) {
 });
 $('#btn-edit-batch').on('click', function(e) {
 	e.preventDefault();
-	if ($('.btnDelete').hasClass('btnDelete--disabled')) {
-		$('.btnDelete').removeClass('btnDelete--disabled');
-		$('.btnPrint').removeClass('btnPrint--disabled');
-	}
 	$('input[name="search"]').trigger({type: "keydown", keyCode: 13});;
 });
 
@@ -492,22 +500,25 @@ function getAjax(data, route, callback) {
 		data: {batchid: data}
 		})
 		.done(function(data, textStatus, jqXHR) {
-			if (data.msg == 'error-searching') {
+			if (data.msg === 'error-searching') {
 				logger.error('Error in search for batch');
 				flashMessage("Error in search for batch");
 				loadingOut(true, 'Error searching for batch');
 			} 
-			if (data.msg == 'batch-exist') {
+			if (data.msg === 'batch-exist') {
 				loadingOut(null, 'Batch Exist');
 				resetInputs();
 				$('#btn-create-page').trigger('click');
 				count = 1;
 			}
-			if (data.msg == 'batch-no-exist') {
+			if (data.msg === 'batch-no-exist') {
 				flashMessage("Batch does not exist yet");
 				loadingOut(null, 'Batch no exist');
 			}
-			if (callback) {
+			if (data.msg === 'batch-deleted'){
+				callback(data);
+			}
+			if (data.msg === "batch-json") {
 				callback(data);
 			}
 		})
