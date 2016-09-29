@@ -13,6 +13,10 @@ var windowLocation = window.location;
 var gui = require('nw.gui');
 var win = gui.Window.get();
 
+$('#new-window').on('click', function(e) {
+	e.preventDefault()
+	window.open("./index.html");
+});
 
 try {
 	fs.statSync(lS.getItem('tempFile'));
@@ -562,6 +566,11 @@ $('.btnPrint').on('click', (e) => {
 		return jsonToArray(lS.getItem('batchData'));
 	}
 	flashMessage("You have to save it first"); 
+});
+
+$('.btnOpenNewWindow').on('click', (e) => {
+	e.preventDefault();
+	window.open("./index.html");
 });
 
 $('.btnDelete').on('click', (e) => {
