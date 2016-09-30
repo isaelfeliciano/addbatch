@@ -437,18 +437,20 @@ function loadingIn() {
 	$('#jsModalLoading i')
 		.addClass('fa-cog fa-spin fa-fw')
 		.removeClass('fa-check');
-    $('#jsModalLoading').removeClass('no-display')
+    $('.modal--loading').removeClass('no-display');
     $('#jsModalLoading').removeClass('fadeOutUpBig')
     .addClass('fadeInUpBig');
 };
 
 function loadingOut(err, text, printAfter) {
+	$('.flashmessage').addClass('notVisible');
 	if (err) {
 		setTimeout(function waitOneSec() {
 		$('#jsModalLoading span').text(text);
 		$('#jsModalLoading i')
 		.removeClass('fa-cog fa-spin fa-fw')
 		.addClass('fa-times');
+		noDisplayLoading();
 	}, 1000);
 	} else {
 		setTimeout(function waitOneSec() {
@@ -456,14 +458,23 @@ function loadingOut(err, text, printAfter) {
 			$('#jsModalLoading i')
 			.removeClass('fa-cog fa-spin fa-fw')
 			.addClass('fa-check');
+			noDisplayLoading();
 		}, 1000);
 	    setTimeout(function waitTwoSec() {
 	    $('#jsModalLoading').removeClass('fadeInUpBig')
 	    .addClass('fadeOutUpBig');
+	    noDisplayLoading();
 	    if (printAfter) {
 	    	printAfter();
 	    }
 	    }, 2500);
+	}
+
+	function noDisplayLoading() {
+		setTimeout(function() {
+			$('.modal--loading').addClass('no-display');
+			$('.flashmessage').addClass('notVisible');
+		}, 1800);
 	}
 }
 
