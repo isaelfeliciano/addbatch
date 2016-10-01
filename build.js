@@ -8,7 +8,7 @@ var nw = new NwBuilder({
 		'!.build/**',
 		'!./.git'
 	],
-	platforms: ['win64'],
+	platforms: ['win64', 'win32'],
 	version: '0.17.4',
 	flavor: 'normal',
 	zip: true,

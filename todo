@@ -1,3 +1,4 @@
 Improve when canceling
 Work on the log config
-Allow more than one instance
+Add option to delete just one ticket
+check delete function, not working right

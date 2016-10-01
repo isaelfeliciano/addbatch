@@ -93,36 +93,37 @@ function putSpaceInFront(string) {
 
 function saveToTextFile(data) {
 	console.log(data.length);
+	window.location = "#main-page";
 	fs.writeFile(lS.getItem('tempFile'), "", function(err) {
 		if (err) {
 			return logger.error("Error cleaning temp file");
 		}
+		var dataCounter = 0;
+		data.forEach(function(line) {
+			dataCounter++;
+			fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
+			logger.info(`File saved in ${lS.getItem('tempFile')}`);
+			if (data.length === dataCounter) {
+				// Sending file to printer
+				let pathToFile = lS.getItem('tempFile');
+				flashMessage("Printing batch");
+				// window.location = "#main-page";
+				resetInputs();
+				exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
+					if (err) {
+						loadingOut(err, "Error printing");
+						return logger.error("Error sending CMD to print");
+					}
+					if (ste) {
+						loadingOut(ste, "Error printing");
+						logger.error(ste);
+					}
+					loadingOut(null, "Printing batch");
+					console.log(sto);
+				});
+			}
+		});	
 	});
-	var dataCounter = 0;
-	data.forEach(function(line) {
-		dataCounter++;
-		fs.appendFileSync(lS.getItem('tempFile'), line.toString() + '\n');
-		logger.info(`File saved in ${lS.getItem('tempFile')}`);
-		if (data.length === dataCounter) {
-			// Sending file to printer
-			let pathToFile = lS.getItem('tempFile');
-			flashMessage("Printing batch");
-			window.location = "#main-page";
-			resetInputs();
-			exec(`notepad /p ${pathToFile}`, (err, sto, ste) => {
-				if (err) {
-					loadingOut(err, "Error printing");
-					return logger.error("Error sending CMD to print");
-				}
-				if (ste) {
-					loadingOut(ste, "Error printing");
-					logger.error(ste);
-				}
-				loadingOut(null, "Printing batch");
-				console.log(sto);
-			});
-		}
-	});	
 }
 
 
