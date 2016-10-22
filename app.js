@@ -1,9 +1,9 @@
-const addbatchServerURL = process.env.ADDBATCH_SERVER_URL;
+const lS = localStorage;
+var addbatchServerURL = lS.getItem('serverAddress');
 const shortid = require('shortid');
 const fs = require('fs');
 const path = require('path');
 const uniqueTempDir = require('unique-temp-dir');
-const lS = localStorage;
 const exec = require('child_process').exec;
 var count = 1;
 var ticketsValues = [];
@@ -147,7 +147,20 @@ $('input[name="added-by"]').on('keydown', (e) => {
 		$('body').focus();
 		lS.setItem('userName', input.val());
 	}
-})
+});
+
+$('.img-main-page').on('click', (e) => {
+	$('#jsModalSetServerContainer').removeClass('no-display');
+	$('.jsModalBtnSetServer').on('click', (e) => {
+		e.preventDefault();
+		let serverAddress = $('input[name="server-address"]').val();
+		lS.setItem('serverAddress', serverAddress);
+		addbatchServerURL = serverAddress;
+		$('#jsModalSetServerContainer').addClass('no-display');
+	});
+}); 
+$('input[name="server-address"]').val(lS.getItem('serverAddress'));
+
 
 function updateNumberFormat() {
 	$('input[name="quantity"]').each(function() {
