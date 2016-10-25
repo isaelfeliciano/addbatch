@@ -1,4 +1,3 @@
 Improve when canceling
 Work on the log config
-Add option to delete just one ticket
-Scroll down as quantity are enter
+Fix button "back" need click twice to work

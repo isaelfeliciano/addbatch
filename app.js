@@ -239,6 +239,7 @@ if (!lS.getItem('userName')) {
 }
 
 $('input[name="number-input"]' ).on('keydown', function(e) {
+	var rightCol = document.getElementById("right-col");
 	if (e.which == 13 || 
 	e.keyCode == 13 || 
 	e.which == 107 ||
@@ -264,6 +265,7 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 			lS.setItem('modified', parseInt(modifiedCurrentValue) +1);
 		}
 	}
+	rightCol.scrollTop = rightCol.scrollHeight;
 });
 
 $('input[name="search"]').on('keydown', function(e) {
