@@ -357,6 +357,10 @@ header h2 {
 .quantity-icon:hover {
     color: #1F3064;
 }
+label .fa-trash:hover {
+    cursor: pointer;
+    color: #C44640;
+}
 
 .quantity-list li input:focus,
 #create-page input[name="added-by"]:focus {

@@ -279,6 +279,7 @@ $('input[name="search"]').on('keydown', function(e) {
 		flashMessage("Searching Batch");
 		getAjax(batchNumber, 'searchBatchGetJSON', function(data) {
 			flashMessage("Batch loaded");
+			modifyingBatch = true;
 			$('#jsTotal').text(data.total);
 			$('#jsBatchNumber').text(data.batchNumber);
 			$('#jsTickets').text(data.ticketsQuantity);
@@ -293,8 +294,8 @@ $('input[name="search"]').on('keydown', function(e) {
 				addTicketsAndPopulateList(ticket.quantity, ticket.modified);
 				if (index == tickets.length) {
 					location = '#create-page';
-					modifyingBatch = true;
 				}
+				console.log(modifyingBatch);
 			});
 		});
 	}
@@ -320,14 +321,37 @@ function recalculateBatch() {
 
 
 function addTicketsAndPopulateList(value, modified) {
-	$('.quantity-list').append(
-		`<li>
-			<label for="quantity" class="quantity-icon fa fa-pencil">
-			<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
-			<span>(${modified})</span>
-			</label>
-		</li>`
-	);
+	if (modifyingBatch === false){
+		$('.quantity-list').append(
+			`<li>
+				<label for="quantity" class="quantity-icon fa fa-pencil">
+				<i for="quantity" id="jsDelTicketBtn${count}" class="fa fa-trash"></i>
+				<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
+				<span>(${modified})</span>
+				</label>
+			</li>`
+		);
+	} else {
+		$('.quantity-list').append(
+			`<li>
+				<label for="quantity" class="quantity-icon fa fa-pencil">
+				<input id="${count}" class="jsResetInput" type="text" name="quantity" value="${value}" maxlength="15"> 
+				<span>(${modified})</span>
+				</label>
+			</li>`
+		);
+	}
+
+	//Binding event
+	$(`#jsDelTicketBtn${count}`).on("click", (e) => {
+		$(e.target).parent().parent().remove();
+		$("#jsTickets").text(parseInt($("#jsTickets").text()) - 1);
+		recalculateBatch();
+		if ($(".quantity-list li").length === 0) {
+			$("#jsTotal").text("0");
+		}
+	});
+
 	$('input[name="number-input"]').val('');
 	
 	/*var backSpace = jQuery.Event("keydown");
