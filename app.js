@@ -266,6 +266,7 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 		}
 	}
 	rightCol.scrollTop = rightCol.scrollHeight;
+	location = '#create-page'; //Hack so back button can work
 });
 
 $('input[name="search"]').on('keydown', function(e) {
