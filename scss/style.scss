@@ -104,12 +104,12 @@ h2 {
 input {
     color: $font-color-input;
     border: 2px solid $font-color;
-		background-color: #b8bbc6;
-}
-input:focus {
-    color: $font-color-input;
-    border: 2px solid $font-color;
-    background-color: $font-color;
+	background-color: #b8bbc6;
+    &:focus {
+        color: $font-color-input;
+        border: 2px solid $font-color;
+        background-color: $font-color;
+    }
 }
 
 .modal {

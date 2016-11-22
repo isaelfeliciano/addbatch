@@ -6,7 +6,8 @@ var nw = new NwBuilder({
 		'!./node_modules/mongodb/**',
 		'!./node_modules/mongodb-core/**',
 		'!.build/**',
-		'!./.git'
+		'!./.git',
+		'!.scss/**'
 	],
 	platforms: ['win64', 'win32', 'osx64'],
 	version: '0.17.4',
@@ -14,7 +15,7 @@ var nw = new NwBuilder({
 	zip: true,
 	buildDir: './build',
 	cacheDir: '../nw-cache',
-	appVersion: '0.0.1',
+	appVersion: '1.0.0',
 	appName: 'AddBatch'
 });
 
