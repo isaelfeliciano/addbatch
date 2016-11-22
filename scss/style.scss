@@ -1,0 +1,452 @@
+
+$background-color: #e1e8f0;
+$font-color:	   #1f3064;
+$font-color-input: #f5a04c;
+$warning-color:    #c44640;
+$success-color:    #667092;
+
+*{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	display: block;
+}
+/* >>>>---- HELPERS ----*/
+.center-align, .center-align-absolute{
+	margin-left: auto;
+	margin-right: auto;
+}
+.center-align-absolute{
+  left: 0;
+  right: 0;
+}
+.center-text{
+	text-align: center;
+}
+
+.padding-sm{
+	padding: 1em;
+}
+.box-radius{
+  border-radius: 5px;
+}
+.not-visible, .notVisible {
+/*  visibility: hidden;*/
+	opacity: 0;
+	-webkit-transition:opacity 1s linear;
+}
+.no-display {
+	display: none;
+}
+.is-visible{
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* ---- HELPERS ----<<<<*/
+
+/*Flashmessge*/
+.flashmessage{
+  position: absolute;
+  top: 4em;
+  width: 80%;
+  
+  background: #fff;
+  border-top: 0.4em solid #04193F;
+
+  z-index: 99999;
+}
+.flashmessage>p{
+  padding: 1em;
+}
+/*Flashmessge*/
+
+body, html {
+	width: 100%;
+	height: 100%;
+	background-color: $background-color;
+	overflow: hidden;
+	color: $font-color;
+	font-size: 16px;
+	font-family: 'calibri', 'ubuntu';
+}
+
+#main-page, #create-page {
+	width: 100%;
+	height: 100%;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+
+    &:visited {
+    	color: blue;
+    }
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+h1, h2 {
+	padding: 0.1em 0;
+}
+
+h1 {
+	font-size: 3em;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+input {
+    color: $font-color-input;
+    border: 2px solid $font-color;
+		background-color: #b8bbc6;
+}
+input:focus {
+    color: $font-color-input;
+    border: 2px solid $font-color;
+    background-color: $font-color;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    z-index: 10;
+}
+.modal__box {
+    width: 60%;
+    height: 50%;
+    position: absolute;
+    top: 25%;
+    background-color: #FFF;
+  	border: 1px solid $font-color-input;
+
+    & i {
+        margin-top: 0.5em;
+    }
+    & input {
+        margin-top: 1em;
+        font-size: 2em;
+    }
+}
+.modal__box__btn-cancel {
+    position: absolute;
+    right: 0.5em;
+    cursor: pointer;
+}
+
+.modal--loading {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.modal__box--loading {
+  	width: 15em;
+	height: 10em;
+}
+.modal__box--loading i {
+  position: relative;
+  top: 0.1em;
+  padding: 0;
+  margin: 0;
+}
+.modal__box--loading span {
+  margin-top: 1em;
+  font-size: 1.3em;
+}
+
+.search-batch {
+	width: 2em;
+	font-size: 6em;
+	margin-top: 5%;
+    text-align: center;
+}
+
+#main-page .btn {
+	position: relative;
+}
+
+#main-page #btn-create-page {
+    top: 3em;
+}
+
+#main-page .btn i {
+    position: absolute;
+    left: 1em;
+}
+
+.btn {
+	width: 11em;
+	height: 1.5em;
+	background-color: $font-color-input;
+	color: #FFF;
+	border: none;
+	font-size: 1.5em;
+	margin-top: 0.5em;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.94;
+}
+
+.btn--blue {
+    background-color: $font-color;
+}
+
+.btn--red {
+    background-color: $warning-color;
+}
+
+
+#create-page {
+    position: relative;
+}
+
+#create-page header {
+    width: 100%;
+    height: 3.5em;
+    background-color: #FFF;
+    top: 0;
+    position: absolute;
+}
+header img {
+    max-width: 9em;
+    position: absolute;
+    top: 0.2em;
+    left: 1em;
+}
+header h2 {
+    position: absolute;
+    top: 0.6em;
+}
+
+.toggle-nav {
+    margin: 0;
+    padding: 0;
+    top: 0.8em;
+    right: 1em;
+    position: absolute;
+    color: $font-color-input;
+}
+
+.header-menu {
+    width: 13em;
+    padding: 10px 5px;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.5);
+    border-radius: 3px;
+    background: $font-color;
+    position: absolute;
+    top: 4em;
+    /*text-align: right;*/
+    right: 1em;
+    z-index: 15;
+}
+
+.header-menu ul {
+    display: inline-block;
+}
+
+
+.header-menu li {
+    margin: 1em 0.5em 0em 0em;
+    list-style: none;
+}
+
+
+.header-menu a {
+    color: #FFF;
+    transition:color linear 0.15s;
+    font-size: 1.3em;
+}
+
+.header-menu a:hover {
+    text-decoration: none;
+    color: $font-color-input;
+}
+
+.header-menu i {
+    margin-left: 0.1em;
+    margin-right: 0.5em;
+}
+
+.header-menu .btnPrint--disabled,
+.header-menu .btnPrint--disabled:hover,
+.header-menu .btnDelete--disabled,
+.header-menu .btnDelete--disabled:hover {
+    color: grey;
+}
+
+.navigation {
+	list-style: none;
+    margin: 0;
+    padding: 0;
+	text-decoration: underline;
+	top: 1.3em;
+	right: 1em;
+	position: absolute;
+}
+.navigation li {
+    display: inline;
+    float: right;
+    padding: 0 0.3em;
+}
+
+#create-page .container {
+    width: 100%;
+	height: 80%;
+    top: 4em;
+    padding: 0 1em;
+    position: relative;
+}
+
+.container .left-col {
+    width: 65%;
+    position: relative;
+    top: 5em;
+}
+.stat-number {
+    height: 0.9em;
+    font-size: 4.5em;
+    border: 2px solid $background-color;
+    background-color: $background-color;
+    color: $font-color;
+}
+
+
+.left-col span {
+    font-size: 1.1em;
+    padding-bottom: 1em;
+}
+
+.container .right-col {
+    width: 35%;
+	height: 90%;
+    right: 1.5em;
+    position: absolute;
+    top: 6em;
+    text-align: right;
+	overflow-y: auto;
+}
+
+.quantity-list li {
+	
+}
+.quantity-list li input, 
+#create-page input[name="added-by"] {
+	padding: none;
+    font-size: 1.4em;
+	text-align: right;
+	border: 2px solid $background-color;
+    background-color: $background-color;
+    color: $font-color;
+    display: inline;
+	width: 9em;
+}
+.quantity-list li:nth-of-type(even) > input {
+	opacity: 0.7;
+}
+
+/*This is a hack for show icon on hover in input*/
+.quantity-icon {
+    color: $background-color;
+}
+.quantity-icon:hover {
+    color: $font-color;
+}
+label .fa-trash:hover {
+    cursor: pointer;
+    color: $warning-color;
+}
+
+.quantity-list li input:focus,
+#create-page input[name="added-by"]:focus {
+	color: $font-color-input;
+    border: 2px solid $font-color;
+    background-color: $font-color;
+	opacity: 1;
+}
+
+.quantity-list li span {
+	display: inline;
+    font-size: 0.88em;
+    color: $font-color;
+}
+
+#create-page input[name="number-input"] {
+    width: 9em;
+    position: absolute;
+    top: 2em;
+    font-size: 2.5em;
+	text-align: right;
+	color: $font-color;
+	padding-right: 0.1em;
+}
+#create-page input[name="number-input"]:focus {
+	color: $font-color-input;
+}
+
+#create-page .btn {
+    position: absolute;
+    bottom: 2em;
+}
+
+.added-by {
+    position: absolute;
+    bottom: 1em;
+    margin-left: 1em;
+}
+
+#create-page input[name="added-by"] {
+    text-align: left;
+}
+
+@media print {
+    body {
+        max-width: 302px;
+        font-size: 16px;
+    }
+    input, p {
+        border: 0 !important;
+        border-style: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    #create-page .container {
+        top: 0.1em;
+        height: 100%;
+        position: absolute;
+    }
+	.container .left-col { /* Batch stats */
+		width: 100%;
+        height: 10%;
+        display: inline-block;
+        position: relative;
+        padding: 0;
+        margin: 0;
+        top: 70%;
+        right: 1em;
+        text-align: right;
+	}
+	.stat-number {
+        font-size: 16px;
+		font-weight: bold;
+        display: inline-block;
+	}
+
+    .container .right-col { /* Tickets quantities */
+        width: 100%;
+        height: 90%;
+        position: absolute;
+        overflow-y: hidden;
+        top: 0;
+    }
+    .quantity-list li input, 
+    #create-page input[name="added-by"] {
+        font-size: 14px;
+    }
+}
