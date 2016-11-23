@@ -147,16 +147,16 @@ input {
 .modal__box--loading {
   	width: 15em;
 	height: 10em;
-}
-.modal__box--loading i {
-  position: relative;
-  top: 0.1em;
-  padding: 0;
-  margin: 0;
-}
-.modal__box--loading span {
-  margin-top: 1em;
-  font-size: 1.3em;
+    & i {
+      position: relative;
+      top: 0.1em;
+      padding: 0;
+      margin: 0;
+    }
+    & span {
+      margin-top: 1em;
+      font-size: 1.3em;
+    }
 }
 
 .search-batch {
@@ -166,17 +166,19 @@ input {
     text-align: center;
 }
 
-#main-page .btn {
-	position: relative;
-}
+#main-page {
+    & .btn {
+    	position: relative;
+    }
 
-#main-page #btn-create-page {
-    top: 3em;
-}
+    & #btn-create-page {
+        top: 3em;
+    }
 
-#main-page .btn i {
-    position: absolute;
-    left: 1em;
+    & .btn i {
+        position: absolute;
+        left: 1em;
+    }
 }
 
 .btn {
@@ -188,11 +190,11 @@ input {
 	font-size: 1.5em;
 	margin-top: 0.5em;
     cursor: pointer;
+    &:hover {
+        opacity: 0.94;
+    }
 }
 
-.btn:hover {
-    opacity: 0.94;
-}
 
 .btn--blue {
     background-color: $font-color;
@@ -205,15 +207,15 @@ input {
 
 #create-page {
     position: relative;
+    & header {
+        width: 100%;
+        height: 3.5em;
+        background-color: #FFF;
+        top: 0;
+        position: absolute;
+    }
 }
 
-#create-page header {
-    width: 100%;
-    height: 3.5em;
-    background-color: #FFF;
-    top: 0;
-    position: absolute;
-}
 header img {
     max-width: 9em;
     position: absolute;
@@ -245,41 +247,38 @@ header h2 {
     /*text-align: right;*/
     right: 1em;
     z-index: 15;
+    & ul {
+        display: inline-block;
+    }
+
+    & li {
+        margin: 1em 0.5em 0em 0em;
+        list-style: none;
+    }
+
+    & a {
+        color: #FFF;
+        transition:color linear 0.15s;
+        font-size: 1.3em;
+        &:hover {
+            text-decoration: none;
+            color: $font-color-input;
+        }
+    }
+
+    & i {
+        margin-left: 0.1em;
+        margin-right: 0.5em;
+    }
+
+    & .btnPrint--disabled,
+    & .btnPrint--disabled:hover,
+    & .btnDelete--disabled,
+    & .btnDelete--disabled:hover {
+        color: grey;
+    }
 }
 
-.header-menu ul {
-    display: inline-block;
-}
-
-
-.header-menu li {
-    margin: 1em 0.5em 0em 0em;
-    list-style: none;
-}
-
-
-.header-menu a {
-    color: #FFF;
-    transition:color linear 0.15s;
-    font-size: 1.3em;
-}
-
-.header-menu a:hover {
-    text-decoration: none;
-    color: $font-color-input;
-}
-
-.header-menu i {
-    margin-left: 0.1em;
-    margin-right: 0.5em;
-}
-
-.header-menu .btnPrint--disabled,
-.header-menu .btnPrint--disabled:hover,
-.header-menu .btnDelete--disabled,
-.header-menu .btnDelete--disabled:hover {
-    color: grey;
-}
 
 .navigation {
 	list-style: none;
@@ -289,11 +288,11 @@ header h2 {
 	top: 1.3em;
 	right: 1em;
 	position: absolute;
-}
-.navigation li {
-    display: inline;
-    float: right;
-    padding: 0 0.3em;
+    & li {
+        display: inline;
+        float: right;
+        padding: 0 0.3em;
+    }
 }
 
 #create-page .container {
@@ -385,15 +384,15 @@ label .fa-trash:hover {
 	text-align: right;
 	color: $font-color;
 	padding-right: 0.1em;
-}
-#create-page input[name="number-input"]:focus {
-	color: $font-color-input;
+    &:focus {
+    	color: $font-color-input;
+    }
+    & .btn {
+        position: absolute;
+        bottom: 2em;
+    }
 }
 
-#create-page .btn {
-    position: absolute;
-    bottom: 2em;
-}
 
 .added-by {
     position: absolute;
