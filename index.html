@@ -33,7 +33,7 @@
 <div id="jsModalSetServerContainer" class="modal no-display">
     <div class="modal__box center-align-absolute center-text box-radius">
         <i id="jsModalIcon" class="fa fa-5x fa-server"></i>
-        <p>Set the server address</p>
+        <p>Set the server IP address</p>
         <input id="jsModalInput" class="center-align" type="text" name="server-address" placeholder="http://serverip:port/">
         <button class="jsModalBtnSetServer btn center-align box-radius">Save</button>
     </div>
@@ -46,46 +46,50 @@
 	</div>
 </div>
 
+<header class="jsHideOnPrint">
+	<img class="img-create-page" src="img/fenix-mfg-logo.png">
+
+	<h2 class="header-app-title center-align-absolute center-text">AddBatch</h2>
+	
+	<!-- <ul class="navigation">
+		<li><a class="btnCancel" href="#main-page">Cancel</a></li>
+		<li><a href="#main-page">Home</a></li>
+	</ul> -->
+
+	<a class="toggle-nav" href="#"><i class="fa fa-2x fa-bars"></i></a>
+	<nav class="header-menu no-display">
+		<ul>
+			<li><a class="btnCancel header-menu-btn" href="#main-page"><i class="fa fa-chevron-left"></i> Back</a></li>
+
+			<li><a class="btnPrint btnPrint--disabled header-menu-btn" href="#"><i class="fa fa-print"></i> Print</a></li>
+
+			<li><a class="btnOpenNewWindow header-menu-btn" href="#"><i class="fa fa-plus-square-o"></i> New window</a></li>
+
+			<li><a class="btnDelete btnDelete--disabled header-menu-btn" href="#"><i class="fa fa-trash"></i> Delete batch</a></li>
+
+			<li><a class="btnSetServerIp header-menu-btn" href="#"><i class="fa fa-server"></i> Set Server IP</a></li>
+		</ul>
+	</nav>
+</header>
+
 <div id="main-page" class="jsHideOnPrint center-text">
-	<img class="img-main-page center-align" src="img/fenix-mfg-logo.png">
+	<img class="no-display img-main-page center-align" src="img/fenix-mfg-logo.png">
 
-	<h1>AddBatch</h1>
-	<h2>Create a digital adding tape</h2>
+	<h1 class="no-display">AddBatch</h1>
+	<h2 class="no-display">Create a digital adding tape</h2>
 
-	<input class="search-batch center-align box-radius" type="text" name="search" placeholder="000">
+	<div class="main-page__container">
+		<input class="search-batch center-align box-radius" type="text" name="search" placeholder="000">
 
-	<button id="btn-edit-batch" class="btn btn--blue center-align box-radius"><i class="fa">&#xf14b</i> View batch</button>
+		<button id="btn-edit-batch" class="btn btn--blue center-align box-radius"><i class="fa">&#xf14b</i> View batch</button>
 
 
-	<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Add new batch</button>
+		<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Add new batch</button>
+	</div>
 </div>
 
 
 <div id="create-page">
-	<header class="jsHideOnPrint">
-		<img class="img-create-page" src="img/fenix-mfg-logo.png">
-
-		<h2 class="header-app-title center-align-absolute center-text">AddBatch</h2>
-		
-		<!-- <ul class="navigation">
-			<li><a class="btnCancel" href="#main-page">Cancel</a></li>
-			<li><a href="#main-page">Home</a></li>
-		</ul> -->
-
-		<a class="toggle-nav" href="#"><i class="fa fa-2x fa-bars"></i></a>
-		<nav class="header-menu no-display">
-			<ul>
-				<li><a class="btnCancel" href="#main-page"><i class="fa fa-chevron-left"></i> Back</a></li>
-
-				<li><a class="btnPrint" href="#"><i class="fa fa-print"></i> Print</a></li>
-
-				<li><a class="btnOpenNewWindow" href="#"><i class="fa fa-plus-square-o"></i> New window</a></li>
-
-				<li><a class="btnDelete" href="#"><i class="fa fa-trash"></i> Delete batch</a></li>
-			</ul>
-		</nav>
-	</header>
-
 	<div class="container">
 		<div class="left-col">
 			<p id="jsTotal" class="stat-number">0</p>
@@ -108,9 +112,9 @@
 		</div>
 	</div>
 
+	<button id="jsBtnSaveAndPrint" class="btn-save-print jsHideOnPrint btn center-align-absolute box-radius">Save and Print</button>
 	<input data-type="number" class="jsHideOnPrint jsResetInput center-align-absolute box-radius" type="text" name="number-input" maxlength="15">
 
-	<button id="jsBtnSaveAndPrint" class="jsHideOnPrint btn center-align-absolute box-radius">Save and Print</button>
 
 	<span class="added-by">Added by <input type="text" name="added-by"></span>
 </div>

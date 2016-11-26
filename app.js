@@ -149,7 +149,8 @@ $('input[name="added-by"]').on('keydown', (e) => {
 	}
 });
 
-$('.img-main-page').on('click', (e) => {
+$('.btnSetServerIp').on('click', (e) => {
+	hideHeaderMenu();
 	$('#jsModalSetServerContainer').removeClass('no-display');
 	$('.jsModalBtnSetServer').on('click', (e) => {
 		e.preventDefault();
@@ -266,7 +267,9 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 		}
 	}
 	rightCol.scrollTop = rightCol.scrollHeight;
+	// $('input[name="number-input"]' ).focus();
 	location = '#create-page'; //Hack so back button can work
+	// Test if works on windows
 });
 
 $('input[name="search"]').on('keydown', function(e) {
@@ -604,6 +607,9 @@ $('.btnCancel').on('click', (e) => {
 	if (!$('.header-menu').hasClass('no-display')){
 		$('.header-menu').addClass('no-display');
 	}
+
+	$('.btnPrint').addClass('btnPrint--disabled');
+	$('.btnDelete').addClass('btnDelete--disabled');
 });
 
 $('.btnPrint').on('click', (e) => {
@@ -613,7 +619,7 @@ $('.btnPrint').on('click', (e) => {
 		return;
 	}
 
-	$('.header-menu').addClass('no-display');
+	hideHeaderMenu();
 	if (modifyingBatch === true) {
 		return jsonToArray(lS.getItem('batchData'));
 	}
@@ -622,6 +628,7 @@ $('.btnPrint').on('click', (e) => {
 
 $('.btnOpenNewWindow').on('click', (e) => {
 	e.preventDefault();
+	hideHeaderMenu();
 	window.open("./index.html");
 });
 
@@ -633,7 +640,7 @@ $('.btnDelete').on('click', (e) => {
 	}
 
 	$('#jsModalDeleteContainer').removeClass('no-display');
-	$('.header-menu').addClass('no-display');;
+	hideHeaderMenu();
 });
 
 $('.jsModalBtnDelete').on('click', (e) => {
@@ -683,3 +690,14 @@ $('.toggle-nav').on('click', function(e) {
 	e.preventDefault();
 	$('.header-menu').toggleClass('no-display');
 });
+
+$('.toggle-nav').on('blur', function(e) {
+	if ($(e.relatedTarget).hasClass('header-menu-btn')){
+		return;
+	}
+	hideHeaderMenu();
+});
+
+function hideHeaderMenu() {
+	$('.header-menu').addClass('no-display');
+}
