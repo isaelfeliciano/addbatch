@@ -139,8 +139,10 @@ input {
 
 #main-page .btn {
   position: relative; }
+
 #main-page #btn-create-page {
   top: 3em; }
+
 #main-page .btn i {
   position: absolute;
   left: 1em; }
@@ -223,7 +225,10 @@ header h2 {
   .header-menu i {
     margin-left: 0.1em;
     margin-right: 0.5em; }
-  .header-menu .btnPrint--disabled, .header-menu .btnPrint--disabled:hover, .header-menu .btnDelete--disabled, .header-menu .btnDelete--disabled:hover {
+  .header-menu .btnPrint--disabled,
+  .header-menu .btnPrint--disabled:hover,
+  .header-menu .btnDelete--disabled,
+  .header-menu .btnDelete--disabled:hover {
     color: grey; }
 
 .navigation {
@@ -307,7 +312,7 @@ label .fa-trash:hover {
 .quantity-list li span {
   display: inline;
   font-size: 0.88em;
-  color: #1F3064; }
+  color: #FFFFFF; }
 
 #create-page input[name="number-input"] {
   width: 9em;
@@ -340,18 +345,15 @@ label .fa-trash:hover {
   body {
     max-width: 302px;
     font-size: 16px; }
-
   input, p {
     border: 0 !important;
     border-style: none !important;
     box-shadow: none !important;
     outline: none !important; }
-
   #create-page .container {
     top: 0.1em;
     height: 100%;
     position: absolute; }
-
   .container .left-col {
     /* Batch stats */
     width: 100%;
@@ -363,12 +365,10 @@ label .fa-trash:hover {
     top: 70%;
     right: 1em;
     text-align: right; }
-
   .stat-number {
     font-size: 16px;
     font-weight: bold;
     display: inline-block; }
-
   .container .right-col {
     /* Tickets quantities */
     width: 100%;
@@ -376,9 +376,6 @@ label .fa-trash:hover {
     position: absolute;
     overflow-y: hidden;
     top: 0; }
-
   .quantity-list li input,
   #create-page input[name="added-by"] {
     font-size: 14px; } }
-
-/*# sourceMappingURL=style.css.map */
