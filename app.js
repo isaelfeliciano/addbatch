@@ -13,6 +13,7 @@ var windowLocation = window.location;
 var gui = require('nw.gui');
 var win = gui.Window.get();
 
+
 $('#new-window').on('click', function(e) {
 	e.preventDefault()
 	window.open("./index.html");
@@ -275,7 +276,6 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 $('input[name="search"]').on('keydown', function(e) {
 	if (e.which == 13 || e.keyCode == 13) {
 		e.preventDefault();
-
 		if ($('.btnDelete').hasClass('btnDelete--disabled')) {
 			$('.btnDelete').removeClass('btnDelete--disabled');
 			$('.btnPrint').removeClass('btnPrint--disabled');
@@ -480,7 +480,7 @@ function loadingIn() {
 	$('#jsModalLoading span').text("Loading...");
 	$('#jsModalLoading i')
 		.addClass('fa-cog fa-spin fa-fw')
-		.removeClass('fa-check');
+		.removeClass('fa-check fa-times');
     $('.modal--loading').removeClass('no-display');
     $('#jsModalLoading').removeClass('fadeOutUpBig')
     .addClass('fadeInUpBig');
@@ -492,7 +492,7 @@ function loadingOut(err, text, printAfter) {
 		setTimeout(function waitOneSec() {
 		$('#jsModalLoading span').text(text);
 		$('#jsModalLoading i')
-		.removeClass('fa-cog fa-spin fa-fw')
+		.removeClass('fa-cog fa-spin fa-fw fa-check')
 		.addClass('fa-times');
 		noDisplayLoading();
 	}, 1000);
@@ -500,7 +500,7 @@ function loadingOut(err, text, printAfter) {
 		setTimeout(function waitOneSec() {
 			$('#jsModalLoading span').text(text);
 			$('#jsModalLoading i')
-			.removeClass('fa-cog fa-spin fa-fw')
+			.removeClass('fa-cog fa-spin fa-fw fa-times')
 			.addClass('fa-check');
 			noDisplayLoading();
 		}, 1000);
@@ -572,6 +572,8 @@ function getAjax(data, route, callback) {
 			}
 			if (data.msg === 'batch-no-exist') {
 				flashMessage("Batch does not exist yet");
+				$('.btnPrint').addClass('btnPrint--disabled');
+				$('.btnDelete').addClass('btnDelete--disabled');
 				loadingOut(null, 'Batch no exist');
 			}
 			if (data.msg === 'batch-deleted'){
@@ -584,7 +586,9 @@ function getAjax(data, route, callback) {
 		.fail(function(jqXHR, textStatus, errorThrown) {
 			flashMessage("Couldn't connect to server");
 			logger.error("Error sending request");
-			loadingOut(true, "Error sending to server")
+			loadingOut(true, "Error sending to server");
+			window.location = '#main-page'
+			resetInputs();
 		})
 		.always(function(data, textStatus, jqXHR) {
 			console.log("complete");

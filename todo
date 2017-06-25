@@ -1,6 +1,27 @@
 Work on the log config
+
 Add create control sheet
-Fix get name when adding new batch
-Add search batch
+
+Fix get name when adding new batch (Need to test)
+
+Add search batch range (Ask Ismael for Batch Control List)
+
 Add sumary report
+
 Tag empty batchs
+
+If the name is undefined prompt ask for name?
+
+Add get total from batches db.getCollection('batchCollection').aggregate([ {$group: {_id: '$*', total: {$sum: '$total' } } } ])
+
+Fix loading icons won't show the corrent one (I think is fixed)
+
+Add pick up the Server Addres from a static remote text file
+
+
+
+
+
+Fixed when searching batch was enabling print and delete buttons from header menu
+
+Fixed when couldn't connect to server looking if batch exits was not returning to Main Page
