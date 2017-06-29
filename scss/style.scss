@@ -51,6 +51,57 @@ $text-color-secondary:   #B8BBC6;
     visibility: hidden;
 }
 
+.padding-sm{
+	padding: 1em;
+}
+.box-radius{
+  border-radius: 5px;
+}
+.inline {
+	display: inline;
+}
+.inline-block {
+	display: inline-block;
+}
+.block {
+	display: block;
+}
+.right {
+//	float: right;
+	position: relative;
+	left: 50%;
+}
+.left {
+//	float: left;
+	position: absolute;
+	left: 0;
+}
+
+.bigger-text {
+    font-size: 3em;
+}
+.big-text {
+    font-size: 1.5em;
+}
+.mid-size-text {
+    font-size: 1.2rem;
+}
+.can-scroll {
+    overflow-y: auto;
+}
+.bold {
+	font-weight: bold;
+}
+.bolder {
+	font-weight: bolder;
+}
+.italic {
+	font-style: italic;
+}
+.letter-space {
+    letter-spacing: 0.5em;
+}
+
 
 /* ---- HELPERS ----<<<<*/
 
@@ -190,11 +241,84 @@ input {
     }
 }
 
+#main-page__statistics {
+	position: relative;
+	top: 3.5rem;
+	height: 8rem;
+	width: 100%;
+	background-color: $secondary-color;
+	& .statistics__side, .statistics__middle {
+		height: 8rem;
+		position: relative;
+		display: inline-block;
+		color: #FFF;
+//		border: 1px solid yellow;
+	}
+	& .statistics__side {
+		margin-top: 0.8rem;
+		width: 18rem;
+		& > p {
+			border-bottom: solid 1px $text-color-secondary;
+		}
+		& #added-box, #modified-box {
+			margin-top: 0.5rem;
+			& span {
+				font-size: 1rem;
+				font-weight: 100;
+				color: $text-color-secondary;
+			}
+		}
+		& #modified-box {
+			& p {
+				font-size: 1.2rem;
+				font-weight: bold;
+			}
+		}
+	}
+	& .statistics__middle {
+		width: 10rem;
+		& #main-page__statistics__title {
+			position: relative;
+			top: -1rem;
+//			border-bottom: 1px solid $text-color-secondary;
+			color: $fenix-orange;
+		}
+		& span {
+			font-size: 1rem;
+			font-weight: 100;
+			color: $text-color-secondary;
+		}
+	}
+	
+	& .statistics__side--right {
+		text-align: left;
+		& #added-box{
+			border-right: 1px solid $text-color-secondary;
+			padding-right: 0.5rem;
+		}
+		& #modified-box {
+			margin-left: 0.5rem;
+		}
+	}
+	
+	& .statistics__side--left {
+		text-align: right;
+		& #added-box{
+			border-left: 1px solid $text-color-secondary;
+			padding-left: 0.5rem;
+		}
+		& #modified-box {
+			margin-right: 0.5rem;
+		}
+	}
+}
+
 .main-page__container {
     width: 100%;
     position: relative;
-    top: 10em;
+    top: 4em;
 }
+
 
 .btn {
 	width: 11em;

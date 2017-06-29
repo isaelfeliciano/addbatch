@@ -49,6 +49,27 @@ log4js.configure({
 var logger = log4js.getLogger();
 logger.setLevel("ERROR");
 
+function getStatistics() {
+	$.ajax({
+		url: addbatchServerURL+'getStatistics',
+		type: 'GET'
+	}).done((data, textStatus, jqXHR) => {
+		stats.addedBatches = data.addedBatches;
+		stats.batchesTotal = data.batchesTotal;
+		stats.modifiedBatches = data.modifiedBatches;
+		stats.modifiedBatchesTimes = data.modifiedBatchesTimes;
+		stats.addedTickets = data.addedTickets;
+		stats.modifiedTickets = data.modifiedTickets;
+		stats.modifiedTicketsTimes = data.modifiedTicketsTimes;
+	}).fail((jqXHR, textStatus, errorThrown) => {
+		flashMessage("Couldn't get statistics");
+		logger.error("Error sending request --Get Statistics");
+		// loadingOut(true, "Error sending to server");
+		window.location = '#main-page'
+		// resetInputs();
+	})
+};
+getStatistics();
 
 function jsonToArray (jsonData) {
 	// loadingIn();
@@ -87,6 +108,7 @@ function jsonToArray (jsonData) {
 }
 
 function putSpaceInFront(string) {
+	console.log(string);
 	let size = string.length;
 	let difference = 24 - size;
 	return string = ' '.repeat(difference) + string;
@@ -163,6 +185,11 @@ $('.btnSetServerIp').on('click', (e) => {
 }); 
 $('input[name="server-address"]').val(lS.getItem('serverAddress'));
 
+$('.btnUpdateStatistics').on('click', (e) => {
+	e.preventDefault();
+	hideHeaderMenu();
+	getStatistics();
+});
 
 function updateNumberFormat() {
 	$('input[name="quantity"]').each(function() {
@@ -285,6 +312,7 @@ $('input[name="search"]').on('keydown', function(e) {
 		flashMessage("Searching Batch");
 		getAjax(batchNumber, 'searchBatchGetJSON', function(data) {
 			flashMessage("Batch loaded");
+			$('.search-batch').blur();
 			modifyingBatch = true;
 			$('#jsTotal').text(data.total);
 			$('#jsBatchNumber').text(data.batchNumber);
@@ -297,7 +325,7 @@ $('input[name="search"]').on('keydown', function(e) {
 			var tickets = data.tickets;
 			_.forEach(tickets, function(ticket, index) {
 				count = index++;
-				addTicketsAndPopulateList(ticket.quantity, ticket.modified);
+				addTicketsAndPopulateList(ticket.quantity, numeral(ticket.modified).format('00'));
 				if (index == tickets.length) {
 					location = '#create-page';
 				}
@@ -315,7 +343,7 @@ function recalculateBatch() {
 	let tempStorage = [];
 	let ticketsQuantity = parseInt($('#jsTickets').text());
 	$('input[name="quantity"]').each(function(i, value) {
-		tempStorage.push(numeral().unformat($(this).val()));
+		tempStorage.push(numeral($(this).val())._value);
 		if (i == (ticketsQuantity - 1)) {
 			console.log("recalculateBatch");
 			let total = _.sum(tempStorage);
@@ -369,7 +397,7 @@ function addTicketsAndPopulateList(value, modified) {
 	$('#jsTickets').text($('.quantity-list').children().length);
 
 	if (typeof(value) == 'string'){
-		value = numeral().unformat(value);
+		value = numeral(value)._value;
 	}
 	value = parseFloat(value);
 	recalculateBatch();
@@ -435,10 +463,8 @@ var getTickets = function(tickets, callback) {
 	let resultArray = [];
 	$('input[name="quantity"]').each(function(i, value) {
 		let obj = {};
-		obj.quantity = numeral().unformat($(this).val());
-		obj.modified = $(this).next().text();
-		obj.modified = obj.modified.replace('(' ,'').
-			replace(')', '');
+		obj.quantity = numeral($(this).val())._value;
+		obj.modified = numeral('-'+$(this).next().text())._value;
 		resultArray.push(obj);
 		if (i == (tickets-1))
 			callback(resultArray);
@@ -457,7 +483,7 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 	let batchObj = {};
 	let batchNumber = parseInt($('#jsBatchNumber').text());
 	let ticketsQuantity = parseInt($('#jsTickets').text());
-	let total = numeral().unformat($('#jsTotal').text());
+	let total = numeral($('#jsTotal').text())._value;
 	let modified = lS.getItem('modified');
 	let addedBy = lS.getItem('userName');
 	getTickets(ticketsQuantity, function(tickets){
@@ -466,7 +492,7 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 			batchNumber: batchNumber,
 			ticketsQuantity: ticketsQuantity,
 			total: total,
-			modified: modified,
+			modified: parseInt(modified),
 			addedBy: addedBy,
 			tickets: tickets
 		}
@@ -523,13 +549,13 @@ function loadingOut(err, text, printAfter) {
 }
 
 function sendJSON(data) {
-	data = localStorage.getItem('batchData');
+	dataToSend = localStorage.getItem('batchData');
 	$.ajax({
 		url: addbatchServerURL + 'saveBatchAndPrint',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
-		data: data,
+		data: dataToSend,
 		})
 		.done(function(data, textStatus, jqXHR) {
 			if (data.msg == 'error-saving') {
@@ -539,6 +565,8 @@ function sendJSON(data) {
 				logger.info(`success ${data.msg}`);
 				loadingOut(null, 'Batch saved', jsonToArray(lS.getItem('batchData')));
 				count = 1;
+				stats.lastBatchAdded = JSON.parse(dataToSend).batchNumber;
+				getStatistics();
 			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {

@@ -6,13 +6,13 @@ Fix get name when adding new batch (Need to test)
 
 Add search batch range (Ask Ismael for Batch Control List)
 
-Add sumary report
+Add sumary report (Done)
 
 Tag empty batchs
 
 If the name is undefined prompt ask for name?
 
-Add get total from batches db.getCollection('batchCollection').aggregate([ {$group: {_id: '$*', total: {$sum: '$total' } } } ])
+Add get total from batches (Done)
 
 Fix loading icons won't show the corrent one (I think is fixed)
 
