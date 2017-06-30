@@ -296,7 +296,9 @@ $('input[name="number-input"]' ).on('keydown', function(e) {
 	}
 	rightCol.scrollTop = rightCol.scrollHeight;
 	// $('input[name="number-input"]' ).focus();
-	location = '#create-page'; //Hack so back button can work
+	// location = '#create-page';
+	// Disabled, update quantity input wont work  
+	//Hack so back button can work
 	// Test if works on windows
 });
 

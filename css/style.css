@@ -227,6 +227,9 @@ input {
       font-size: 1rem;
       font-weight: 100;
       color: #B8BBC6; }
+    #main-page__statistics .statistics__middle p:nth-child(3) {
+      position: relative;
+      top: 0.35rem; }
   #main-page__statistics .statistics__side--right {
     text-align: left; }
     #main-page__statistics .statistics__side--right #added-box {

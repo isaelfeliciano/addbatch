@@ -288,6 +288,10 @@ input {
 			font-weight: 100;
 			color: $text-color-secondary;
 		}
+        & p:nth-child(3) {
+            position: relative;
+            top: 0.35rem;
+        }
 	}
 	
 	& .statistics__side--right {
