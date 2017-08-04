@@ -10,12 +10,12 @@ var nw = new NwBuilder({
 		'!.scss/**'
 	],
 	platforms: ['win64', 'win32', 'osx64'],
-	version: '0.17.4',
+	version: '0.23.5',
 	flavor: 'normal',
 	zip: true,
 	buildDir: './build',
 	cacheDir: '../nw-cache',
-	appVersion: '1.0.0',
+	appVersion: '1.1.1',
 	appName: 'AddBatch'
 });
 

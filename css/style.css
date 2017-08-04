@@ -5,6 +5,9 @@
   display: block; }
 
 /* >>>>---- HELPERS ----*/
+.margin-sm {
+  margin: 0.5rem; }
+
 .center-align, .center-align-absolute {
   margin-left: auto;
   margin-right: auto; }
@@ -15,6 +18,12 @@
 
 .center-text {
   text-align: center; }
+
+.right-text {
+  text-align: right; }
+
+.left-text {
+  text-align: left; }
 
 .padding-sm {
   padding: 1em; }
@@ -36,12 +45,6 @@
 
 .invisible {
   visibility: hidden; }
-
-.padding-sm {
-  padding: 1em; }
-
-.box-radius {
-  border-radius: 5px; }
 
 .inline {
   display: inline; }
@@ -71,6 +74,16 @@
 
 .can-scroll {
   overflow-y: auto; }
+
+.big-font {
+  font-size: 1.2em; }
+
+.bigger-font {
+  font-size: 1.5em; }
+
+.normal-font {
+  font-size: 1rem;
+  font-weight: normal; }
 
 .bold {
   font-weight: bold; }
@@ -268,6 +281,11 @@ input {
 .btn--red {
   background-color: #c44640; }
 
+.btn--no-selected {
+  background-color: #B8BBC6; }
+  .btn--no-selected:hover {
+    background-color: #F5A04C; }
+
 #create-page {
   position: relative; }
 
@@ -436,49 +454,135 @@ label .fa-trash:hover {
   z-index: 9;
   position: absolute; }
 
-@media print {
-  body {
-    max-width: 302px;
-    font-size: 16px; }
+.modal#batch-type-time .btn {
+  display: inline-block;
+  width: 12rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem; }
+.modal#batch-type-time p {
+  margin-top: 1rem; }
+.modal#batch-type-time input {
+  margin-top: 0.1rem;
+  font-size: 1.2rem;
+  width: 12rem; }
 
-  input, p {
-    border: 0 !important;
-    border-style: none !important;
-    box-shadow: none !important;
-    outline: none !important; }
+.wickedpicker {
+  z-index: 10; }
 
-  #create-page .container {
-    top: 0.1em;
-    height: 100%;
-    position: absolute; }
+html.html-add-and-control {
+  overflow: auto;
+  width: 8.5in;
+  height: auto;
+  font-family: Verdana; }
 
-  .container .left-col {
-    /* Batch stats */
-    width: 100%;
-    height: 10%;
-    display: inline-block;
-    position: relative;
-    padding: 0;
-    margin: 0;
-    top: 70%;
-    right: 1em;
+body.body-add-and-control {
+  overflow: visible;
+  width: auto;
+  height: auto;
+  color: black; }
+
+.page-wrapper {
+  overflow: auto;
+  width: auto;
+  height: auto; }
+
+.page-body {
+  width: 8.5in;
+  height: 11in;
+  position: relative;
+  display: block; }
+
+.tickets-detaills {
+  width: 3in;
+  height: 90%;
+  display: inline-block;
+  position: absolute;
+  top: 2rem; }
+  .tickets-detaills p {
+    text-align: right;
+    font-size: 1rem;
+    line-height: 1.5rem; }
+  .tickets-detaills span {
     text-align: right; }
 
-  .stat-number {
-    font-size: 16px;
-    font-weight: bold;
+.dashed-line {
+  border: 1px dashed black;
+  position: relative;
+  float: right;
+  width: 2.5in; }
+
+.control-sheet {
+  width: 5in;
+  height: 20%;
+  border: 1px solid black;
+  display: inline-block;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.5rem; }
+
+.rectangle-instruction {
+  border: 1px solid black;
+  width: 5rem;
+  height: 3.5rem;
+  position: relative;
+  text-align: center;
+  left: 11rem; }
+  .rectangle-instruction p {
+    position: relative;
+    top: 25%; }
+
+.tickets-range {
+  position: relative;
+  width: auto; }
+  .tickets-range p {
+    width: 12rem;
+    margin-right: 1rem;
+    margin-left: 1rem; }
+
+.arrival-time {
+  margin-top: 3rem; }
+
+.tickets-count {
+  margin-top: 2rem; }
+  .tickets-count p {
+    width: 12rem;
+    margin-right: 1rem;
+    margin-left: 1rem; }
+
+.added-by-print {
+  margin-top: 1rem; }
+
+.mapics-total {
+  margin-top: 2rem; }
+
+.entered-by {
+  margin-top: 3rem; }
+
+.printer-list {
+  width: auto;
+  padding: 10px 5px;
+  border-radius: 3px;
+  background: #FFFFFF;
+  /*text-align: right;*/
+  right: 1em; }
+  .printer-list ul {
     display: inline-block; }
-
-  .container .right-col {
-    /* Tickets quantities */
-    width: 100%;
-    height: 90%;
-    position: absolute;
-    overflow-y: hidden;
-    top: 0; }
-
-  .quantity-list li input,
-  #create-page input[name="added-by"] {
-    font-size: 14px; } }
+  .printer-list li {
+    margin: 1em 0.5em 0em 0em;
+    list-style: none;
+    cursor: default; }
+  .printer-list a {
+    color: #1F3064;
+    transition: color linear 0.15s;
+    font-size: 1.3em;
+    display: inline-block; }
+    .printer-list a:hover {
+      text-decoration: none;
+      color: #F5A04C; }
+  .printer-list i {
+    margin-left: 0.1em;
+    margin-right: 0.5em;
+    display: inline-block; }
 
 /*# sourceMappingURL=style.css.map */

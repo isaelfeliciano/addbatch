@@ -7,6 +7,8 @@
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/animation.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/wickedpicker.min.css">
+	
 </head>
 <body>
 <div class="flashmessage center-align-absolute center-text notVisible"></div>
@@ -30,7 +32,7 @@
     </div>
 </div>
 
-<div id="jsModalSetServerContainer" class="modal no-display">
+<div id="jsModalSetServerContainer" class="modal no-display print">
     <div class="modal__box center-align-absolute center-text box-radius">
         <i id="jsModalIcon" class="fa fa-5x fa-server"></i>
         <p>Set the server IP address</p>
@@ -38,6 +40,8 @@
         <button class="jsModalBtnSetServer btn center-align box-radius">Save</button>
     </div>
 </div>
+
+
 	
 <div class="no-display modal modal--loading">
 	<div id="jsModalLoading" class="modal__box modal__box--loading center-align-absolute center-text box-radius animated">
@@ -45,6 +49,37 @@
 	  	<span>Loading...</span>
 	</div>
 </div>
+
+<!-- MODAL SELECT TYPE AND TIME-->
+<div id="batch-type-time" class="modal" v-if="showModal">
+    <div class="modal__box center-align-absolute center-text box-radius">
+    	<p class="big-text">Select the Batch Type</p>
+        <button class="btn btn-batch-type btn--no-selected box-radius" @click="selectingBatchType($event, 'Warehouse')">Warehouse</button>
+        <button class="btn btn-batch-type btn--no-selected box-radius" @click="selectingBatchType($event, 'WIP')">WIP</button>
+
+        <p class="big-text">Select Arrival Time</p>
+        <input class="center-align timepicker center-text box-radius" type="time" name="timepicker" v-model="arrivalTime">
+
+        <p class="big-text">Select Arrival Date</p>
+        <input class="center-align center-text box-radius" type="date" name="arrival-date" v-model="arrivalDate">
+        
+        <button @click="setBatchTypeTimeDate"  class="btn center-align box-radius">Save</button>
+    </div>
+</div>
+<!-- MODAL SELECT TYPE AND TIME-->
+
+<!-- MODAL SELECT PRINTER-->
+<div class="modal modal-select-printer" v-if="showModal">
+    <div class="modal__box center-align-absolute center-text box-radius can-scroll">
+    	<p class="big-text">Select Printer</p>
+    	<ul class="printer-list left-text">
+    		<li v-for="printer in printerList"><i class="fa fa-print"></i> <a @click.prevent="printerSelected(printer.printerName)">{{ printer.printerName }}</a></li>
+    	</ul>
+        
+        <!-- <button @click="setBatchTypeTimeDate"  class="btn center-align box-radius">Save</button> -->
+    </div>
+</div>
+<!-- MODAL SELECT PRINTER-->
 
 <header class="jsHideOnPrint">
 	<img class="img-create-page" src="img/fenix-mfg-logo.png">
@@ -70,6 +105,8 @@
 			<li><a class="btnSetServerIp header-menu-btn" href="#"><i class="fa fa-server"></i> Set Server IP</a></li>
 
 			<li><a class="btnUpdateStatistics header-menu-btn" href="#"><i class="fa fa-refresh"></i> Update Statistics</a></li>
+
+			<li><a class="btnSelectPrinters header-menu-btn" href="#"><i class="fa fa-print"></i> Select Printer</a></li>
 		</ul>
 	</nav>
 </header>
@@ -152,11 +189,14 @@
 
 
 	<span class="added-by">Added by <input type="text" name="added-by"></span>
+
+	
 </div>
 
 <script src="js/vue.js"></script>
 <script src="js/jquery.js"></script>
 <script src="js/jquery.number.min.js"></script>
+<script src="js/moment.js"></script>
 <script src="js/numeral.js"></script>
 <script src="js/lodash.js"></script>
 <script src="js/vue-vm.js"></script>

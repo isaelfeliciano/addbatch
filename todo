@@ -4,24 +4,27 @@ Add create control sheet
 
 Fix get name when adding new batch (Need to test)
 
-Add search batch range (Ask Ismael for Batch Control List)
-
-Add sumary report (Done)
-
-Tag empty batchs
+Add search batch range (Done)
 
 If the name is undefined prompt ask for name?
-
-Add get total from batches (Done)
 
 Fix loading icons won't show the corrent one (I think is fixed)
 
 Add pick up the Server Addres from a static remote text file
 
 
+//For generate batch range
+var beginingNumber = 60001;
+const endingNumber = 60999;
+var jsonList = [];
+var batchNumber = 0;
 
-
-
-Fixed when searching batch was enabling print and delete buttons from header menu
-
-Fixed when couldn't connect to server looking if batch exits was not returning to Main Page
+for (var i = 1; beginingNumber < endingNumber; i + 24) {
+	++batchNumber;
+  let lastNumber = beginingNumber + 24;
+	jsonList.push({ batchNumber: batchNumber, beginingNumber: beginingNumber, endingNumber: lastNumber});
+  beginingNumber += 25;
+  if (beginingNumber >= endingNumber) {
+  	console.log(jsonList);
+  }
+}

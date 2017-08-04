@@ -9,6 +9,7 @@ $secondary-color:        #526AB4;
 $fenix-orange:           #F5A04C;
 $input-background-color: #FFFFFF;
 $text-color-secondary:   #B8BBC6;
+$grey:                   #B8BBC6;
 
 *{
 	box-sizing: border-box;
@@ -17,64 +18,67 @@ $text-color-secondary:   #B8BBC6;
 	display: block;
 }
 /* >>>>---- HELPERS ----*/
+.margin-sm {
+    margin: 0.5rem;
+}
 .center-align, .center-align-absolute{
-	margin-left: auto;
-	margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 .center-align-absolute{
   left: 0;
   right: 0;
 }
 .center-text{
-	text-align: center;
+    text-align: center;
+}
+.right-text {
+    text-align: right;
+}
+.left-text {
+    text-align: left;
 }
 
 .padding-sm{
-	padding: 1em;
+    padding: 1em;
 }
 .box-radius{
   border-radius: 5px;
 }
 .not-visible, .notVisible {
 /*  visibility: hidden;*/
-	opacity: 0;
-	-webkit-transition:opacity 1s linear;
+    opacity: 0;
+    -webkit-transition:opacity 1s linear;
 }
 .no-display {
-	display: none;
+    display: none;
 }
 .is-visible{
-	visibility: visible;
-	opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
 .invisible {
     visibility: hidden;
 }
 
-.padding-sm{
-	padding: 1em;
-}
-.box-radius{
-  border-radius: 5px;
-}
 .inline {
-	display: inline;
+    display: inline;
 }
 .inline-block {
-	display: inline-block;
+    display: inline-block;
 }
 .block {
-	display: block;
+    display: block;
 }
 .right {
-//	float: right;
-	position: relative;
-	left: 50%;
+//  float: right;
+    position: relative;
+    left: 50%;
 }
 .left {
-//	float: left;
-	position: absolute;
-	left: 0;
+//  float: left;
+    position: absolute;
+    left: 0;
 }
 
 .bigger-text {
@@ -89,20 +93,29 @@ $text-color-secondary:   #B8BBC6;
 .can-scroll {
     overflow-y: auto;
 }
+
+.big-font {
+    font-size: 1.2em;
+}
+.bigger-font {
+    font-size: 1.5em;
+}
+.normal-font {
+    font-size: 1rem;
+    font-weight: normal;
+}
 .bold {
-	font-weight: bold;
+    font-weight: bold;
 }
 .bolder {
-	font-weight: bolder;
+    font-weight: bolder;
 }
 .italic {
-	font-style: italic;
+    font-style: italic;
 }
 .letter-space {
     letter-spacing: 0.5em;
 }
-
-
 /* ---- HELPERS ----<<<<*/
 
 /*Flashmessge*/
@@ -346,6 +359,12 @@ input {
 .btn--red {
     background-color: $warning-color;
 }
+.btn--no-selected {
+    background-color: $grey;
+    &:hover {
+        background-color: $fenix-orange;
+    }
+}
 
 
 #create-page {
@@ -556,48 +575,215 @@ label .fa-trash:hover {
     position: absolute;
 }
 
-@media print {
-    body {
-        max-width: 302px;
-        font-size: 16px;
-    }
-    input, p {
-        border: 0 !important;
-        border-style: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-    }
-    #create-page .container {
-        top: 0.1em;
-        height: 100%;
-        position: absolute;
-    }
-	.container .left-col { /* Batch stats */
-		width: 100%;
-        height: 10%;
-        display: inline-block;
-        position: relative;
-        padding: 0;
-        margin: 0;
-        top: 70%;
-        right: 1em;
-        text-align: right;
-	}
-	.stat-number {
-        font-size: 16px;
-		font-weight: bold;
-        display: inline-block;
-	}
+// @media print {
+//     body {
+//         max-width: 302px;
+//         font-size: 16px;
+//     }
+//     input, p {
+//         border: 0 !important;
+//         border-style: none !important;
+//         box-shadow: none !important;
+//         outline: none !important;
+//     }
+//     #create-page .container {
+//         top: 0.1em;
+//         height: 100%;
+//         position: absolute;
+//     }
+// 	.container .left-col { /* Batch stats */
+// 		width: 100%;
+//         height: 10%;
+//         display: inline-block;
+//         position: relative;
+//         padding: 0;
+//         margin: 0;
+//         top: 70%;
+//         right: 1em;
+//         text-align: right;
+// 	}
+// 	.stat-number {
+//         font-size: 16px;
+// 		font-weight: bold;
+//         display: inline-block;
+// 	}
 
-    .container .right-col { /* Tickets quantities */
-        width: 100%;
-        height: 90%;
-        position: absolute;
-        overflow-y: hidden;
-        top: 0;
+//     .container .right-col { /* Tickets quantities */
+//         width: 100%;
+//         height: 90%;
+//         position: absolute;
+//         overflow-y: hidden;
+//         top: 0;
+//     }
+//     .quantity-list li input, 
+//     #create-page input[name="added-by"] {
+//         font-size: 14px;
+//     }
+// }
+
+.modal#batch-type-time {
+    & .btn {
+        display: inline-block;
+        width: 12rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
     }
-    .quantity-list li input, 
-    #create-page input[name="added-by"] {
-        font-size: 14px;
+    & p {
+        margin-top: 1rem;
+    }
+    & input {
+        margin-top: 0.1rem;
+        font-size: 1.2rem;
+        width: 12rem;
+    }
+}
+
+.wickedpicker {
+    z-index: 10;
+}
+
+html.html-add-and-control {
+    overflow: auto;
+    width: 8.5in;
+    height: auto;
+    font-family: Verdana;
+}
+body.body-add-and-control {
+    overflow: visible;
+    width: auto;
+    height: auto;
+    color: black;
+}
+
+
+.page-wrapper {
+    overflow: auto;
+    width: auto;
+    height: auto;
+}
+
+.page-body {
+    width: 8.5in;
+    height: 11in;
+    position: relative;
+    display: block;
+}
+
+.tickets-detaills {
+    width: 3in;
+    height: 90%;
+    display: inline-block;
+    position: absolute;
+    top: 2rem;
+    & p {
+        text-align: right;
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    & span {
+        text-align: right;
+    }
+}
+
+.dashed-line {
+    border: 1px dashed black;
+    position: relative;
+    float: right;
+    width: 2.5in;
+}
+
+.control-sheet {
+    width: 5in;
+    height: 20%;
+    border: 1px solid black;
+    display: inline-block;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    padding: 0.5rem;
+}
+
+.rectangle-instruction {
+    border: 1px solid black;
+    width: 5rem;
+    height: 3.5rem;
+    position: relative;
+    text-align: center;
+    left: 11rem;
+    & p {
+        position: relative;
+        top: 25%;
+    }
+}
+
+.tickets-range {
+    position: relative;
+    width: auto;
+    & p {
+        width: 12rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+.arrival-time {
+    margin-top: 3rem;
+}
+
+.tickets-count {
+    margin-top: 2rem;
+    & p {
+        width: 12rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+.added-by-print {
+    margin-top: 1rem;
+}
+.mapics-total {
+    margin-top: 2rem;
+}
+.entered-by {
+    margin-top: 3rem;
+}
+
+.printer-list {
+    width: auto;
+    padding: 10px 5px;
+    // box-shadow: 0px 10px 10px rgba(0,0,0,0.5);
+    border-radius: 3px;
+    background: $input-background-color;
+    // position: absolute;
+    // top: 4em;
+    /*text-align: right;*/
+    right: 1em;
+    // z-index: 15;
+    & ul {
+        display: inline-block;
+    }
+
+    & li {
+        margin: 1em 0.5em 0em 0em;
+        list-style: none;
+        cursor: default;
+    }
+
+    & a {
+        color: $fenix-blue;
+        transition:color linear 0.15s;
+        font-size: 1.3em;
+        display: inline-block;
+        &:hover {
+            text-decoration: none;
+            color: $fenix-orange;
+        }
+    }
+
+    & i {
+        margin-left: 0.1em;
+        margin-right: 0.5em;
+        display: inline-block;
     }
 }

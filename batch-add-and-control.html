@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html class="html-add-and-control">
+<head>
+	<link rel="stylesheet" type="text/css" href="css/reset2.css">
+	 <link rel="stylesheet" type="text/css" href="css/style.css"> 
+	
+</head>
+
+<body class="body-add-and-control">
+<div class="page-wrapper">
+	<div class="page-body">
+		<p class="center-text">AddBatch Sheet</p>
+		
+		<div class="tickets-detaills">
+			<p v-for="ticket in tickets">{{ formatNumber(ticket.quantity) }} ({{ formatModified(ticket.modified) }})</p>
+			
+			<div class="dashed-line"></div>
+			
+			<p class="bold">{{ formatNumber(total) }}</p>
+			<span>Total</span>
+		</div>
+		
+		<div class="control-sheet">
+			<div class="rectangle-instruction margin-sm no-display">
+				<p>Code 1st Screen</p>
+			</div>
+			
+			<p class="margin-sm no-display" v-if="batchType === 'Warehouse'">Batch Type: <span class="inline bold">Warehouse M</span></p>
+
+			<p class="margin-sm no-display" v-else>Batch Type: <span class="inline bold">WIP W</span></p>
+			
+			<p class="batch-number bigger-text bold center-text margin-sm"> {{ batchNumber }}<span class="normal-font">Batch number</span></p>
+			
+			<div class="tickets-range center-text no-display">
+				<p class="right-text inline-block big-text">{{ beginingTicket }}<span class="normal-font">Begining ticket number</span></p>
+				
+				<p class="left-text inline-block big-text">{{ endingTicket }}<span class="normal-font">Ending ticket number</span></p>
+			</div>
+			
+			<p class="arrival-time center-text big-font no-display">{{ arrivalTime }}<span class="normal-font">{{ arrivalDate }}</span><span class="normal-font">Arrival Time</span></p>
+			
+			<div class="tickets-count center-text">
+				<p class="bold inline-block right-text">{{ tickets.length }} <span class="normal-font inline">Tickets</span></p>
+				
+				<p class="bold inline-block left-text">{{ modified }}x <span class="normal-font inline">Modified</span></p>
+			</div>
+			
+			<p class="added-by-print center-text">Added by: {{ addedBy }}</p>
+			
+			<pre class="mapics-total no-display">Total from Mapics       : _______________________</pre>
+			
+			<p class="entered-by no-display">Entered into Mapics by: _______________________</p>
+		</div>
+	</div>
+</div>
+
+<script src="js/jquery.js"></script>
+<script src="js/numeral.js"></script>
+<script src="js/vue.js"></script>
+
+<script type="text/javascript" style="display: none;">
+	var win = nw.Window.get();
+	Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj))
+	}
+	Storage.prototype.getObj = function(key) {
+	    return JSON.parse(this.getItem(key))
+	}
+
+	var dataObj = localStorage.getObj('batchData');
+
+	var vmControlSheet = new Vue({
+		el: '.page-wrapper',
+		data: dataObj,
+		methods: {
+			formatNumber: function(number) {
+				return numeral(number).format('0,0.000');
+			},
+			formatModified: function(number) {
+				return numeral(number).format('00');
+			}
+		}
+	});
+
+	// win.print({'printer': localStorage.getItem('printerName')});
+
+	$('.page-body').on('mouseover', (e) => {
+	e.preventDefault();
+	setTimeout(function() {
+		// window.close(true);
+	}, 500);
+});
+</script>
+</body>
+</html>
