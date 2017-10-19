@@ -251,29 +251,22 @@ $('#jsModalInput').on('keydown', (e) => {
 });
 
 function btnModalSaveNewBatch() {
-	/*let ticketNumber = $('#jsModalInput').val();
+	let ticketNumber = $('#jsModalInput').val();
 	if (ticketNumber == 0 || ticketNumber.length !== 5) {
 		return flashMessage("Wrong Ticket Number");
-	}*/
+	}
 
-	let batchNumber = $('#jsModalInput').val();
-	if (batchNumber == 0) {
-    	return flashMessage("Batch number can't be 0");
-    }
-    $('#jsBatchNumber').text(batchNumber);
-
-	/*let beginingNumber = getBeginingNumber(ticketNumber);
-	console.log(beginingNumber);*/
+	let beginingNumber = getBeginingNumber(ticketNumber);
+	console.log(beginingNumber);
 
 	
 	$('#jsModalInputContainer').addClass('no-display');
 	$('input[name="number-input"]').focus();
 	loadingIn();
-	getAjax(batchNumber, 'searchBatch', null)
-	/*getAjax(beginingNumber, 'getBatchNumberByBeginingNumber', (batchNumber) => {
+	getAjax(beginingNumber, 'getBatchNumberByBeginingNumber', (batchNumber) => {
 		$('#jsBatchNumber').text(batchNumber);
 		batchTypeTime.showModal = true;
-	});*/
+	});
 }
 
 function btnModalSaveNewUser() {
@@ -647,38 +640,24 @@ function getAjax(data, route, callback) {
 				flashMessage("Error in search for batch");
 				loadingOut(true, 'Error searching for batch');
 			} 
-			/*if (data.msg === 'range-no-exist') {
+			if (data.msg === 'range-no-exist') {
 				loadingOut(null, 'No exist batch for this ticket');
 				resetInputs();
 				$('#btn-create-page').trigger('click');
 				count = 1;
-			}*/
-
-			if (data.msg === 'batch-exist') {
-				loadingOut(null, 'Batch Exist');
-				resetInputs();
-				$('#btn-create-page').trigger('click');
-				count = 1;
 			}
-			/*if (data.msg === 'batch-no-exist') {
+			if (data.msg === 'batch-no-exist') {
 				loadingOut(null, 'Batch not found');
 				resetInputs();
 				// $('#btn-create-page').trigger('click');
 				count = 1;
-			}*/
-			if (data.msg === 'batch-no-exist') {
-				flashMessage("Batch does not exist yet");
-				$('.btnPrint').addClass('btnPrint--disabled');
-				$('.btnDelete').addClass('btnDelete--disabled');
-				loadingOut(null, 'Batch no exist');
 			}
-
-			/*if (data.msg === 'batch-exist') {
+			if (data.msg === 'batch-exist') {
 				loadingOut(null, 'Batch already added');
 				resetInputs();
 				$('#btn-create-page').trigger('click');
 				count = 1;
-			}*/
+			}
 			if (data.msg === 'batch-no-added') {
 				flashMessage("You can add this batch");
 				$('.btnPrint').addClass('btnPrint--disabled');
@@ -711,7 +690,6 @@ function getAjax(data, route, callback) {
 
 function resetInputs() {
 	$('.jsResetInput').val('');
-	$('#jsModalInput').val('');
 	$('#jsBatchNumber, #jsTotal, #jsTickets, #jsTimesModified').text('0');
 	$('.quantity-list').empty();
 	ticketsValues = [];

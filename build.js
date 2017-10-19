@@ -9,7 +9,7 @@ var nw = new NwBuilder({
 		'!./.git',
 		'!.scss/**'
 	],
-	platforms: ['win64', 'win32'],
+	platforms: ['win64', 'win32', 'osx64'],
 	version: '0.23.5',
 	flavor: 'normal',
 	zip: true,
