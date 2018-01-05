@@ -369,6 +369,14 @@ input {
 
 #create-page {
     position: relative;
+  	& .create-page__header {
+		height: 2rem;
+	  	width: 100%;
+	  	background-color: $secondary-color;
+	  	position: absolute;
+	  	top: 3.57rem;
+	  	color: #FFF;
+	}
 }
 header {
     width: 100%;
@@ -544,7 +552,7 @@ label .fa-trash:hover {
 #create-page input[name="number-input"] {
     width: 9em;
     position: absolute;
-    top: 2em;
+    top: 2.5em;
     font-size: 2.5em;
 	text-align: right;
 	color: $fenix-blue;
@@ -694,7 +702,7 @@ body.body-add-and-control {
 
 .control-sheet {
     width: 5in;
-    height: 20%;
+    height: 35rem;
     border: 1px solid black;
     display: inline-block;
     position: absolute;

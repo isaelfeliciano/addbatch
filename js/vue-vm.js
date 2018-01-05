@@ -50,7 +50,7 @@ var batchTypeTime = new Vue({
 			createPage.batchType = batchType;
 		},
 		setBatchTypeTimeDate: function(){
-			if (this.batchType === '') {
+			if (createPage.batchType === '') {
 				return flashMessage("You have to select a Batch Type");
 			}
 			createPage.arrivalTime = moment(this.arrivalTime, 'HH:mm a').format('hh:mm A');

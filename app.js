@@ -252,7 +252,7 @@ $('#jsModalInput').on('keydown', (e) => {
 
 function btnModalSaveNewBatch() {
 	let ticketNumber = $('#jsModalInput').val();
-	if (ticketNumber == 0 || ticketNumber.length !== 5) {
+	if (ticketNumber == 0 || ticketNumber.length < 5) {
 		return flashMessage("Wrong Ticket Number");
 	}
 
@@ -279,15 +279,15 @@ function btnModalSaveNewUser() {
 }
 
 function getBeginingNumber(ticketNumber) {
-	let lastTwoNumbers = ticketNumber.slice(3);
+	let lastTwoNumbers = ticketNumber.slice((ticketNumber.length) - 2);
 	lastTwoNumbers = parseInt(lastTwoNumbers);
 
-	let middleNumber = parseInt(ticketNumber.slice(2, 3)) - 1;
-	if (lastTwoNumbers === 00) return ticketNumber.slice(0, 2) + middleNumber + '76';
-	if (lastTwoNumbers <= 25) return ticketNumber.slice(0, 3) + '01';
-	if (lastTwoNumbers <= 50) return ticketNumber.slice(0, 3) + '26';
-	if (lastTwoNumbers <= 75) return ticketNumber.slice(0, 3) + '51';
-	if (lastTwoNumbers <= 99) return ticketNumber.slice(0, 3) + '76';
+	let middleNumber = parseInt(ticketNumber.slice((ticketNumber.length -3), (ticketNumber.length -2))) - 1;
+	if (lastTwoNumbers === 00) return ticketNumber.slice(0, 3) + middleNumber + '76';
+	if (lastTwoNumbers <= 25) return ticketNumber.slice(0, 4) + '01';
+	if (lastTwoNumbers <= 50) return ticketNumber.slice(0, 4) + '26';
+	if (lastTwoNumbers <= 75) return ticketNumber.slice(0, 4) + '51';
+	if (lastTwoNumbers <= 99) return ticketNumber.slice(0, 4) + '76';
 }
 
 // lS.removeItem('userName');

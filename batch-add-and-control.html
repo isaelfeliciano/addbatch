@@ -21,23 +21,23 @@
 		</div>
 		
 		<div class="control-sheet">
-			<div class="rectangle-instruction margin-sm no-display">
+			<div class="rectangle-instruction margin-sm ">
 				<p>Code 1st Screen</p>
 			</div>
 			
-			<p class="margin-sm no-display" v-if="batchType === 'Warehouse'">Batch Type: <span class="inline bold">Warehouse M</span></p>
+			<p class="margin-sm " v-if="batchType === 'Warehouse'">Batch Type: <span class="inline bold">Warehouse M</span></p>
 
-			<p class="margin-sm no-display" v-else>Batch Type: <span class="inline bold">WIP W</span></p>
+			<p class="margin-sm " v-else>Batch Type: <span class="inline bold">WIP W</span></p>
 			
 			<p class="batch-number bigger-text bold center-text margin-sm"> {{ batchNumber }}<span class="normal-font">Batch number</span></p>
 			
-			<div class="tickets-range center-text no-display">
+			<div class="tickets-range center-text ">
 				<p class="right-text inline-block big-text">{{ beginingTicket }}<span class="normal-font">Begining ticket number</span></p>
 				
 				<p class="left-text inline-block big-text">{{ endingTicket }}<span class="normal-font">Ending ticket number</span></p>
 			</div>
 			
-			<p class="arrival-time center-text big-font no-display">{{ arrivalTime }}<span class="normal-font">{{ arrivalDate }}</span><span class="normal-font">Arrival Time</span></p>
+			<p class="arrival-time center-text big-font ">{{ arrivalTime }}<span class="normal-font">{{ arrivalDate }}</span><span class="normal-font">Arrival Time</span></p>
 			
 			<div class="tickets-count center-text">
 				<p class="bold inline-block right-text">{{ tickets.length }} <span class="normal-font inline">Tickets</span></p>
@@ -47,9 +47,9 @@
 			
 			<p class="added-by-print center-text">Added by: {{ addedBy }}</p>
 			
-			<pre class="mapics-total no-display">Total from Mapics       : _______________________</pre>
+			<pre class="mapics-total ">Total from Mapics       : _______________________</pre>
 			
-			<p class="entered-by no-display">Entered into Mapics by: _______________________</p>
+			<p class="entered-by ">Entered into Mapics by: _______________________</p>
 		</div>
 	</div>
 </div>
@@ -82,12 +82,12 @@
 		}
 	});
 
-	// win.print({'printer': localStorage.getItem('printerName')});
+	 win.print({'printer': localStorage.getItem('printerName')});
 
 	$('.page-body').on('mouseover', (e) => {
 	e.preventDefault();
 	setTimeout(function() {
-		// window.close(true);
+		 window.close(true);
 	}, 500);
 });
 </script>

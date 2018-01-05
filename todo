@@ -1,6 +1,6 @@
 Work on the log config
 
-Add create control sheet
+Add create control sheet (Done)
 
 Fix get name when adding new batch (Need to test)
 
@@ -12,17 +12,23 @@ Fix loading icons won't show the corrent one (I think is fixed)
 
 Add pick up the Server Addres from a static remote text file
 
+Fix Saving Batch type and date Modal, saving without choosing type
+
 
 //For generate batch range
 var beginingNumber = 60001;
-const endingNumber = 60999;
+var endingNumber = 60999;
 var jsonList = [];
 var batchNumber = 0;
 
 for (var i = 1; beginingNumber < endingNumber; i + 24) {
 	++batchNumber;
   let lastNumber = beginingNumber + 24;
-	jsonList.push({ batchNumber: batchNumber, beginingNumber: beginingNumber, endingNumber: lastNumber});
+	if (beginingNumber.toString().slice(0, 1) === '1') {
+		jsonList.push({ batchNumber: batchNumber, beginingNumber: beginingNumber, endingNumber: lastNumber});
+	} else {
+		jsonList.push({ batchNumber: batchNumber, beginingNumber: '0' + beginingNumber, endingNumber: '0' + lastNumber});
+	}
   beginingNumber += 25;
   if (beginingNumber >= endingNumber) {
   	console.log(jsonList);
