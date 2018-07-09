@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/animation.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/wickedpicker.min.css">
+	<link rel="stylesheet" href="css/element-ui_v2.4.1.css">
 	
 </head>
 <body>
@@ -81,7 +82,7 @@
 </div>
 <!-- MODAL SELECT PRINTER-->
 
-<header class="jsHideOnPrint">
+<header class="jsHideOnPrint" id="header">
 	<img class="img-create-page" src="img/fenix-mfg-logo.png">
 
 	<h2 class="header-app-title center-align-absolute center-text">AddBatch</h2>
@@ -107,6 +108,8 @@
 			<li><a class="btnUpdateStatistics header-menu-btn" href="#"><i class="fa fa-refresh"></i> Update Statistics</a></li>
 
 			<li><a class="btnSelectPrinters header-menu-btn" href="#"><i class="fa fa-print"></i> Select Printer</a></li>
+
+			<li @click="openControlSheet"><a class="header-menu-btn" href="#"><i class="fa fa-table"></i> Control Sheet</a></li>
 		</ul>
 	</nav>
 </header>
@@ -157,6 +160,15 @@
 
 
 		<button id="btn-create-page" class="btn center-align box-radius"><i class="fa">&#xf0fe</i> Add new batch</button>
+
+		<div id="search-ticket-input">
+			<el-input placeholder="Search by ticket" v-model="searchTicketInput" clearable>
+				<div slot="append">
+					<el-button icon="el-icon-search" @click="searchTicket"></el-button>
+					<el-button icon="el-icon-check" @click="markProcessed"></el-button>
+				</div>
+			</el-input>
+		</div>
 	</div>
 </div>
 
@@ -195,12 +207,14 @@
 </div>
 
 <script src="js/vue.js"></script>
+<script src="js/element-ui_v2.4.3.js"></script>
 <script src="js/jquery.js"></script>
 <script src="js/jquery.number.min.js"></script>
 <script src="js/moment.js"></script>
 <script src="js/numeral.js"></script>
 <script src="js/lodash.js"></script>
 <script src="js/vue-vm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script src="app.js"></script>
 </body>
 </html>

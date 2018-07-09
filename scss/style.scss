@@ -676,6 +676,13 @@ body.body-add-and-control {
     position: relative;
     display: block;
 }
+.big-number {
+  font-size: 6rem;
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  font-weight: bold;
+}
 
 .tickets-detaills {
     width: 3in;
@@ -690,6 +697,10 @@ body.body-add-and-control {
     }
     & span {
         text-align: right;
+    }
+    & .tickets-detaills__total {
+        /* position: relative;
+        left: 13.2rem; */
     }
 }
 
@@ -706,7 +717,7 @@ body.body-add-and-control {
     border: 1px solid black;
     display: inline-block;
     position: absolute;
-    top: 2rem;
+    top: 5.5rem;
     right: 2rem;
     padding: 0.5rem;
 }
@@ -736,6 +747,7 @@ body.body-add-and-control {
 
 .arrival-time {
     margin-top: 3rem;
+    font-size: 2rem;
 }
 
 .tickets-count {
@@ -794,4 +806,9 @@ body.body-add-and-control {
         margin-right: 0.5em;
         display: inline-block;
     }
+}
+
+#search-ticket-input .el-input {
+  width: 264px;
+  top: 5rem;
 }

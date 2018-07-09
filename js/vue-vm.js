@@ -1,3 +1,15 @@
+var header = new Vue({
+	el:'#header',
+	data: {
+
+	},
+	methods: {
+		openControlSheet: function() {
+			window.open('./control-sheet.html');
+			hideHeaderMenu();
+		}
+	}
+})
 var stats = new Vue({
 	el: '#main-page__statistics',
 	data: {
@@ -24,7 +36,7 @@ var createPage = new Vue({
 		beginingTicket: 0,
 		endingTicket: 0,
 		arrivalTime: moment().format('hh:mm A'),
-		arrivalDate: moment().format('DD/MM/YYYY'),
+		arrivalDate: moment().format('MM-DD-YYYY'),
 		addedBy: '',
 		batchType: '',
 		total: '',
@@ -40,7 +52,7 @@ var batchTypeTime = new Vue({
 		arrivalTime: moment().format('HH:mm'),
 		arrivalDate: moment().format('YYYY-MM-DD'),
 		showModal: false,
-		modifyingBatch: false
+		modifyingBatch: false,
 	},
 	methods: {
 		selectingBatchType: function(e, batchType){
@@ -53,8 +65,8 @@ var batchTypeTime = new Vue({
 			if (createPage.batchType === '') {
 				return flashMessage("You have to select a Batch Type");
 			}
-			createPage.arrivalTime = moment(this.arrivalTime, 'HH:mm a').format('hh:mm A');
-			createPage.arrivalDate = moment(this.arrivalDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
+			createPage.arrivalTime = moment(this.arrivalTime, 'HH:mm a').format();
+			createPage.arrivalDate = moment(this.arrivalDate, 'YYYY-MM-DD').format('MM-DD-YYYY');
 			// console.log(createPage.arrivalTime + ' ' + createPage.arrivalDate);
 			this.showModal = false;
 			if (!localStorage.getItem('printerName')) {
@@ -65,10 +77,10 @@ var batchTypeTime = new Vue({
 	},
 	watch: {
 		arrivalTime: function(){
-			createPage.arrivalTime = moment(this.arrivalTime, 'HH:mm a').format('hh:mm A');
+			createPage.arrivalTime = moment(this.arrivalTime, 'HH:mm a').format();
 		},
 		arrivalDate: function(){
-			createPage.arrivalDate = moment(this.arrivalDate, 'YYYY-MM-DD').format('DD/MM/YYYY');
+			createPage.arrivalDate = moment(this.arrivalDate, 'YYYY-MM-DD').format('MM-DD-YYYY');
 		},
 		showModal: function() {
 			if (this.showModal && this.modifyingBatch === false) {
@@ -96,6 +108,29 @@ var vmModalSelectPrinter = new Vue({
 			win.getPrinters((list) => {
 				self.printerList = list; 
 			});
+		}
+	}
+})
+
+var newInput = new Vue({
+	el: '#search-ticket-input',
+	data: {
+		searchTicketInput: null
+	},
+	methods: {
+		searchTicket() {
+			let beginingNumber = getBeginingNumber(this.searchTicketInput);
+			this.$http.get(addbatchServerURL+'getBatchNumberByBeginingNumber', { params:{batchid: beginingNumber} })
+			.then(response => {
+				flashMessage('Batch Number: ' + response.body.batchNumber);
+			})
+		},
+		markProcessed() {
+			let beginingNumber = getBeginingNumber(this.searchTicketInput);
+			this.$http.get(addbatchServerURL+'markProcessed', { params:{batchid: beginingNumber} })
+			.then(response => {
+				flashMessage('Batch Processed');
+			})
 		}
 	}
 })

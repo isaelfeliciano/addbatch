@@ -499,6 +499,13 @@ body.body-add-and-control {
   position: relative;
   display: block; }
 
+.big-number {
+  font-size: 6rem;
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  font-weight: bold; }
+
 .tickets-detaills {
   width: 3in;
   height: 90%;
@@ -511,6 +518,9 @@ body.body-add-and-control {
     line-height: 1.5rem; }
   .tickets-detaills span {
     text-align: right; }
+  .tickets-detaills .tickets-detaills__total {
+    /* position: relative;
+    left: 13.2rem; */ }
 
 .dashed-line {
   border: 1px dashed black;
@@ -524,7 +534,7 @@ body.body-add-and-control {
   border: 1px solid black;
   display: inline-block;
   position: absolute;
-  top: 2rem;
+  top: 5.5rem;
   right: 2rem;
   padding: 0.5rem; }
 
@@ -548,7 +558,8 @@ body.body-add-and-control {
     margin-left: 1rem; }
 
 .arrival-time {
-  margin-top: 3rem; }
+  margin-top: 3rem;
+  font-size: 2rem; }
 
 .tickets-count {
   margin-top: 2rem; }
@@ -591,5 +602,9 @@ body.body-add-and-control {
     margin-left: 0.1em;
     margin-right: 0.5em;
     display: inline-block; }
+
+#search-ticket-input .el-input {
+  width: 264px;
+  top: 5rem; }
 
 /*# sourceMappingURL=style.css.map */

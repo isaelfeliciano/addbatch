@@ -15,7 +15,7 @@ var nw = new NwBuilder({
 	zip: true,
 	buildDir: './build',
 	cacheDir: '../nw-cache',
-	appVersion: '1.1.1',
+	appVersion: '2.0.0',
 	appName: 'AddBatch'
 });
 

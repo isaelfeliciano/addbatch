@@ -14,6 +14,9 @@ Add pick up the Server Addres from a static remote text file
 
 Fix Saving Batch type and date Modal, saving without choosing type
 
+Improve the loading feadback
+
+Set up autoupdate
 
 //For generate batch range
 var beginingNumber = 60001;

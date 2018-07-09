@@ -231,7 +231,7 @@ $('#btn-create-page').on('click', (e) => {
 	window.location = "#create-page";
 	$('#jsModalIcon').attr('class', 'fa fa-5x fa-book').text('');
 	$('#jsModalInput').attr('name', 'batchNumber');
-	$('#jsModalInput').attr('placeholder', 'Enter batch number');
+	$('#jsModalInput').attr('placeholder', 'Enter ticket number');
 	$('#jsModalInputContainer').removeClass('no-display');
 	$('#jsModalInput').focus();
 	$('.jsModalBtnSave').text('Start adding').on('click', (e) => {
@@ -279,6 +279,8 @@ function btnModalSaveNewUser() {
 }
 
 function getBeginingNumber(ticketNumber) {
+	if (ticketNumber.slice((ticketNumber.length -3)) === '000')
+		ticketNumber = parseInt(ticketNumber - 1).toString();
 	let lastTwoNumbers = ticketNumber.slice((ticketNumber.length) - 2);
 	lastTwoNumbers = parseInt(lastTwoNumbers);
 
@@ -522,15 +524,18 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 		lS.setItem('modified', $('#jsTimesModified').text());
 	}
 	let batchObj = {};
-	let batchNumber = parseInt($('#jsBatchNumber').text());
+	let batchNumber = ($('#jsBatchNumber').text());
 	let ticketsQuantity = parseInt($('#jsTickets').text());
 	let total = numeral($('#jsTotal').text())._value;
 	let modified = lS.getItem('modified');
 	let addedBy = lS.getItem('userName');
+	if (addedBy === undefined || addedBy === 'undefined' || addedBy === null || addedBy === '') {
+		addedBy = process.env.USERNAME.toUpperCase();
+	}
 	getTickets(ticketsQuantity, function(tickets){
 		batchObj = {
 			id: id,
-			batchNumber: batchNumber,
+			batchNumber: batchNumber.toString(),
 			ticketsQuantity: ticketsQuantity,
 			total: total,
 			modified: parseInt(modified),
@@ -540,7 +545,8 @@ $('#jsBtnSaveAndPrint').on('click', (e) => {
 			beginingTicket: createPage.beginingTicket,
 			endingTicket: createPage.endingTicket,
 			arrivalTime: createPage.arrivalTime,
-			arrivalDate: createPage.arrivalDate
+			arrivalDate: createPage.arrivalDate,
+			added: true
 		}
 		lS.setObj('batchData', batchObj);
 		// batchObj = JSON.stringify(batchObj);
@@ -611,6 +617,8 @@ function sendJSON(data) {
 				logger.info(`success ${data.msg}`);
 				loadingOut(null, 'Batch saved, now printing', () => {
 					printPage();
+					createPage.batchType = '';
+					$('#jsModalInput').val('');
 				});
 				count = 1;
 				stats.lastBatchAdded = JSON.parse(dataToSend).batchNumber;
@@ -652,7 +660,7 @@ function getAjax(data, route, callback) {
 				// $('#btn-create-page').trigger('click');
 				count = 1;
 			}
-			if (data.msg === 'batch-exist') {
+			if (data.msg === 'batch-added') {
 				loadingOut(null, 'Batch already added');
 				resetInputs();
 				$('#btn-create-page').trigger('click');
@@ -664,14 +672,15 @@ function getAjax(data, route, callback) {
 				$('.btnDelete').addClass('btnDelete--disabled');
 				loadingOut(null, 'Batch ready to be added');
 				console.log(data);
-				createPage.beginingTicket = data.data.beginingNumber;
-				createPage.endingTicket = data.data.endingNumber;
+				createPage.beginingTicket = data.data.beginingTicket;
+				createPage.endingTicket = data.data.endingTicket;
 				callback(data.data.batchNumber);
 			}
 			if (data.msg === 'batch-deleted'){
 				callback(data);
 			}
 			if (data.msg === "batch-json") {
+				console.log("batch-json")
 				callback(data);
 			}
 		})
@@ -758,7 +767,7 @@ $('.jsModalBtnDelete').on('click', (e) => {
 function printTape() {
 	hideOnPrint();
 	window.print({
-		"headerFooterEnabled": true,
+		"headerFooterEnabled": false,
 		"shouldPrintBackgrounds": false
 	});
 	hideOnPrint(); // Unhide elements

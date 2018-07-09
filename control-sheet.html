@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title style="display: none;">Control Sheet</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/element-ui_v2.4.1.css">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+</head>
+<body style="height: 100%">
+
+<div id="app" style="height: 100%">
+<el-button @click="fetchData" type="primary" align="center">Actualizar Tabla</el-button>
+<el-table 
+	:data="batchesData" 
+	width="90%"
+	height="800" 
+	v-loading="loading" 
+	border 
+	ref="singleTable"
+	@current-change="handleCurrentChange">
+	<el-table-column
+		prop="batchNumber"
+		label="Batch #"
+		header-align="center"
+		align="right"
+		width="70">
+	</el-table-column>
+	<el-table-column
+		prop="beginingTicket"
+		label="Start Number"
+		header-align="center"
+		align="right"
+		width="105">
+	</el-table-column>
+	<el-table-column
+		prop="endingTicket"
+		label="Ending Number"
+		header-align="center"
+		align="right"
+		width="75">
+	</el-table-column>
+	<el-table-column
+		prop="batchType"
+		label="Batch Type W / M"
+		align="center"
+		width="92">
+	</el-table-column>
+	<el-table-column
+		prop="ticketsQuantity"
+		label="Batch Size"
+		header-align="center"
+		align="right"width="60">
+	</el-table-column>
+	<el-table-column
+		label="Assigned To:"
+		align="center"
+		width="103">
+		<template slot-scope="scope">
+			<el-input v-model="scope.row.assignedTo" @change="handleInputChange(scope.row)"></el-input>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Responsible:"
+		align="center"
+		width="161">
+		<template slot-scope="scope">
+			<el-input v-model="scope.row.responsible" @change="handleInputChange(scope.row)"></el-input>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Given Date"
+		header-align="center"
+		width="180">
+		<template slot-scope="scope">
+			<el-date-picker
+				width="160"
+				v-model="scope.row.givenDate"
+				type="date"
+				size="mini"
+				placeholder="Pick a day"
+				editable
+				format="dd-MM-yyyy"
+				@change="handleInputChange(scope.row)">
+			</el-date-picker>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Given Time"
+		header-align="center"
+		width="180">
+		<template slot-scope="scope">
+			<el-time-picker
+				v-model="scope.row.givenTime"				
+				editable
+				size="mini"
+				clerable
+				placeholder="Pick a time"
+				format="hh:mm A"
+				@change="handleInputChange(scope.row)">
+			</el-time-picker>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Received Date"
+		header-align="center"
+		width="180">
+		<template slot-scope="scope">
+			<el-date-picker
+				v-model="scope.row.arrivalDate"
+				type="date"
+				size="mini"
+				placeholder="Pick a date"
+				editable
+				format="dd-MM-yyyy"
+				@change="handleInputChange(scope.row)">
+			</el-date-picker>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Received Time"
+		header-align="center"
+		width="180">
+		<template slot-scope="scope">
+			<el-time-picker
+				v-model="scope.row.arrivalTime"				
+				editable
+				size="mini"
+				clerable
+				placeholder="Pick a time"
+				format="hh:mm A"
+				@change="handleInputChange(scope.row)">
+			</el-time-picker>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Processed?"
+		align="center"
+		width="100">
+		<template slot-scope="scope">
+			<el-switch
+			  v-model="scope.row.processed"
+			  @change="handleInputChange(scope.row)">
+			</el-switch>
+		</template>
+	</el-table-column>
+	<el-table-column
+		label="Save"
+		align="center">
+		<template slot-scope="scope">
+			<el-button
+				size="mini"
+				type="primary"
+				:disabled="!scope.row.disableSaveButton"
+				:loading="scope.row.loading"
+				@click="handleSave(scope.$index, scope.row)">Save</el-button>
+		</template>
+	</el-table-column>
+</el-table>
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/element-ui_v2.4.3.js"></script>
+<script src="js/element.locale.en.js"></script>
+<script>
+	ELEMENT.locale(ELEMENT.lang.en)
+</script>
+<script src="js/axios.js" "></script>
+<script src="js/control-sheet.js"></script>
+</body>
+</html>

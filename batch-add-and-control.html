@@ -10,13 +10,15 @@
 <div class="page-wrapper">
 	<div class="page-body">
 		<p class="center-text">AddBatch Sheet</p>
+
+		<p class="big-number">{{ batchNumber }}</p>
 		
 		<div class="tickets-detaills">
 			<p v-for="ticket in tickets">{{ formatNumber(ticket.quantity) }} ({{ formatModified(ticket.modified) }})</p>
 			
 			<div class="dashed-line"></div>
 			
-			<p class="bold">{{ formatNumber(total) }}</p>
+			<p class="tickets-detaills__total bold">{{ formatNumber(total) }}</p>
 			<span>Total</span>
 		</div>
 		
@@ -29,7 +31,7 @@
 
 			<p class="margin-sm " v-else>Batch Type: <span class="inline bold">WIP W</span></p>
 			
-			<p class="batch-number bigger-text bold center-text margin-sm"> {{ batchNumber }}<span class="normal-font">Batch number</span></p>
+			<p class="batch-number bigger-text center-text margin-sm"> {{ batchNumber }}<span class="normal-font">Batch number</span></p>
 			
 			<div class="tickets-range center-text ">
 				<p class="right-text inline-block big-text">{{ beginingTicket }}<span class="normal-font">Begining ticket number</span></p>
@@ -37,7 +39,7 @@
 				<p class="left-text inline-block big-text">{{ endingTicket }}<span class="normal-font">Ending ticket number</span></p>
 			</div>
 			
-			<p class="arrival-time center-text big-font ">{{ arrivalTime }}<span class="normal-font">{{ arrivalDate }}</span><span class="normal-font">Arrival Time</span></p>
+			<p class="arrival-time center-text big-font ">{{ moment(arrivalTime).format('hh:mm A') }}<span class="big-font" style="font-size: 1.6rem">{{ arrivalDate }}</span><span class="normal-font">Arrival Time</span></p>
 			
 			<div class="tickets-count center-text">
 				<p class="bold inline-block right-text">{{ tickets.length }} <span class="normal-font inline">Tickets</span></p>
@@ -56,6 +58,7 @@
 
 <script src="js/jquery.js"></script>
 <script src="js/numeral.js"></script>
+<script src="js/moment.js"></script>
 <script src="js/vue.js"></script>
 
 <script type="text/javascript" style="display: none;">
@@ -78,11 +81,16 @@
 			},
 			formatModified: function(number) {
 				return numeral(number).format('00');
-			}
+			},
+			moment: moment
 		}
 	});
 
-	 win.print({'printer': localStorage.getItem('printerName')});
+	 win.print({
+	 	'printer': localStorage.getItem('printerName'), 
+	 	'marginsType': 2,
+	 	'headerFooterEnabled': false
+	 });
 
 	$('.page-body').on('mouseover', (e) => {
 	e.preventDefault();
